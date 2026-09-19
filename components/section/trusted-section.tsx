@@ -15,7 +15,7 @@ function TrustedCard({
   image: string;
   eager?: boolean;
 }) {
-  return (
+  return ( 
     <article
       data-trusted-card
       className="relative h-[320px] w-[240px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-[#1A1A1A] md:h-[360px] md:w-[270px] lg:h-[400px] lg:w-[301px]"
@@ -99,7 +99,7 @@ export default function TrustedSection() {
   }, [trustedCarouselIndex]);
 
   return (
-    <section className="overflow-x-hidden bg-[#fdf1d2] py-12 md:py-16 lg:py-20">
+    <section className="relative z-0 bg-[#fdf1d2] pt-12 pb-[240px] md:pt-16 md:pb-[190px] lg:pt-20 lg:pb-[160px]">
       <div className="mx-auto max-w-[1320px] px-5 md:px-8 lg:px-10">
         <h2 className="text-center text-[28px] font-bold leading-[1.2] text-black md:text-[32px] lg:text-[40px]">
           Complete Your Event with our{" "}
