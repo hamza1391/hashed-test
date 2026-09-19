@@ -4,6 +4,14 @@ import { create } from "zustand";
 
 export type ListingTab = "venue" | "vendors";
 export type VenueCarouselDirection = "left" | "right";
+export type FeaturedCategoryId =
+  | "rooftop"
+  | "gallery"
+  | "restaurant"
+  | "outdoor"
+  | "studio"
+  | "terrace"
+  | "ballroom";
 
 export type DropdownId =
   | "listing"
@@ -24,6 +32,10 @@ type UIState = {
   currentSlide: number;
   venueCarouselIndex: number;
   venueCarouselMaxIndex: number;
+  featuredCategoryId: FeaturedCategoryId;
+  featuredCarouselIndex: number;
+  featuredCarouselMaxIndex: number;
+  featuredFavoriteIds: string[];
   setListingTab: (tab: ListingTab) => void;
   toggleDropdown: (id: DropdownId) => void;
   closeDropdowns: () => void;
@@ -34,6 +46,10 @@ type UIState = {
   setCurrentSlide: (index: number) => void;
   setVenueCarouselMaxIndex: (maxIndex: number) => void;
   scrollVenueCarousel: (direction: VenueCarouselDirection) => void;
+  setFeaturedCategory: (id: FeaturedCategoryId) => void;
+  setFeaturedCarouselMaxIndex: (maxIndex: number) => void;
+  scrollFeaturedCarousel: (direction: VenueCarouselDirection) => void;
+  toggleFeaturedFavorite: (id: string) => void;
 };
 
 export const useUIStore = create<UIState>((set, get) => ({
@@ -46,6 +62,10 @@ export const useUIStore = create<UIState>((set, get) => ({
   currentSlide: 1,
   venueCarouselIndex: 0,
   venueCarouselMaxIndex: 0,
+  featuredCategoryId: "gallery",
+  featuredCarouselIndex: 0,
+  featuredCarouselMaxIndex: 0,
+  featuredFavoriteIds: [],
   setListingTab: (listingTab) => set({ listingTab, openDropdown: null }),
   toggleDropdown: (id) =>
     set({ openDropdown: get().openDropdown === id ? null : id }),
@@ -70,5 +90,37 @@ export const useUIStore = create<UIState>((set, get) => ({
     if (direction === "right" && venueCarouselIndex < venueCarouselMaxIndex) {
       set({ venueCarouselIndex: venueCarouselIndex + 1 });
     }
+  },
+  setFeaturedCategory: (featuredCategoryId) =>
+    set({ featuredCategoryId, featuredCarouselIndex: 0 }),
+  setFeaturedCarouselMaxIndex: (featuredCarouselMaxIndex) => {
+    const nextIndex = Math.min(
+      get().featuredCarouselIndex,
+      featuredCarouselMaxIndex
+    );
+    set({ featuredCarouselMaxIndex, featuredCarouselIndex: nextIndex });
+  },
+  scrollFeaturedCarousel: (direction) => {
+    const { featuredCarouselIndex, featuredCarouselMaxIndex } = get();
+
+    if (direction === "left" && featuredCarouselIndex > 0) {
+      set({ featuredCarouselIndex: featuredCarouselIndex - 1 });
+      return;
+    }
+
+    if (
+      direction === "right" &&
+      featuredCarouselIndex < featuredCarouselMaxIndex
+    ) {
+      set({ featuredCarouselIndex: featuredCarouselIndex + 1 });
+    }
+  },
+  toggleFeaturedFavorite: (id) => {
+    const { featuredFavoriteIds } = get();
+    set({
+      featuredFavoriteIds: featuredFavoriteIds.includes(id)
+        ? featuredFavoriteIds.filter((item) => item !== id)
+        : [...featuredFavoriteIds, id],
+    });
   },
 }));
