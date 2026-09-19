@@ -59,15 +59,15 @@ function FeaturedCard({
   return (
     <article
       data-featured-card
-      className="flex w-[260px] shrink-0 snap-start flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)] md:w-[240px] lg:w-[280px]"
+      className="flex w-75 h-104.75 shrink-0 snap-start flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
     >
-      <div className="relative h-[168px] bg-[#1A1A1A] md:h-[160px] lg:h-[180px]">
+      <div className="relative h-[200px] bg-[#1A1A1A] ">
         <Image
           src={image}
           alt={title}
           fill
           loading={eager ? "eager" : "lazy"}
-          sizes="(max-width: 768px) 260px, (max-width: 1024px) 240px, 280px"
+          sizes="(max-width: 768px) 300px, (max-width: 1024px) 3000px, 300px"
           className="object-cover"
         />
         <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-medium text-white">

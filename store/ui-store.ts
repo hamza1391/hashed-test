@@ -36,6 +36,8 @@ type UIState = {
   featuredCarouselIndex: number;
   featuredCarouselMaxIndex: number;
   featuredFavoriteIds: string[];
+  trustedCarouselIndex: number;
+  trustedCarouselMaxIndex: number;
   setListingTab: (tab: ListingTab) => void;
   toggleDropdown: (id: DropdownId) => void;
   closeDropdowns: () => void;
@@ -50,6 +52,8 @@ type UIState = {
   setFeaturedCarouselMaxIndex: (maxIndex: number) => void;
   scrollFeaturedCarousel: (direction: VenueCarouselDirection) => void;
   toggleFeaturedFavorite: (id: string) => void;
+  setTrustedCarouselMaxIndex: (maxIndex: number) => void;
+  scrollTrustedCarousel: (direction: VenueCarouselDirection) => void;
 };
 
 export const useUIStore = create<UIState>((set, get) => ({
@@ -66,6 +70,8 @@ export const useUIStore = create<UIState>((set, get) => ({
   featuredCarouselIndex: 0,
   featuredCarouselMaxIndex: 0,
   featuredFavoriteIds: [],
+  trustedCarouselIndex: 0,
+  trustedCarouselMaxIndex: 0,
   setListingTab: (listingTab) => set({ listingTab, openDropdown: null }),
   toggleDropdown: (id) =>
     set({ openDropdown: get().openDropdown === id ? null : id }),
@@ -122,5 +128,27 @@ export const useUIStore = create<UIState>((set, get) => ({
         ? featuredFavoriteIds.filter((item) => item !== id)
         : [...featuredFavoriteIds, id],
     });
+  },
+  setTrustedCarouselMaxIndex: (trustedCarouselMaxIndex) => {
+    const nextIndex = Math.min(
+      get().trustedCarouselIndex,
+      trustedCarouselMaxIndex
+    );
+    set({ trustedCarouselMaxIndex, trustedCarouselIndex: nextIndex });
+  },
+  scrollTrustedCarousel: (direction) => {
+    const { trustedCarouselIndex, trustedCarouselMaxIndex } = get();
+
+    if (direction === "left" && trustedCarouselIndex > 0) {
+      set({ trustedCarouselIndex: trustedCarouselIndex - 1 });
+      return;
+    }
+
+    if (
+      direction === "right" &&
+      trustedCarouselIndex < trustedCarouselMaxIndex
+    ) {
+      set({ trustedCarouselIndex: trustedCarouselIndex + 1 });
+    }
   },
 }));
