@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
 import {
   BadgeCheck,
   CarFront,
@@ -37,6 +38,7 @@ function FeaturedCard({
   parking,
   price,
   image,
+  eager = false,
 }: {
   id: string;
   title: string;
@@ -46,6 +48,7 @@ function FeaturedCard({
   parking: string;
   price: number;
   image: string;
+  eager?: boolean;
 }) {
   const favoriteIds = useUIStore((state) => state.featuredFavoriteIds);
   const toggleFeaturedFavorite = useUIStore(
@@ -58,8 +61,15 @@ function FeaturedCard({
       data-featured-card
       className="flex w-[260px] shrink-0 snap-start flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)] md:w-[240px] lg:w-[280px]"
     >
-      <div className="relative h-[168px] md:h-[160px] lg:h-[180px]">
-        <img src={image} alt={title} className="h-full w-full object-cover" />
+      <div className="relative h-[168px] bg-[#1A1A1A] md:h-[160px] lg:h-[180px]">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          loading={eager ? "eager" : "lazy"}
+          sizes="(max-width: 768px) 260px, (max-width: 1024px) 240px, 280px"
+          className="object-cover"
+        />
         <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-medium text-white">
           <BadgeCheck className="size-3.5" />
           Verified
@@ -181,16 +191,14 @@ export default function FeaturedSection() {
   }, [featuredCarouselIndex, featuredCategoryId]);
 
   return (
-    <section className="relative overflow-hidden py-12 md:py-16 lg:min-h-[800px] lg:py-20">
-      <img
+    <section className="relative overflow-hidden bg-[#1A0F0C] py-12 md:py-16 lg:min-h-[800px] lg:py-20">
+      <Image
         src="/images/featured-venue/featured-dekstop.svg"
         alt=""
-        className="pointer-events-none absolute inset-0 hidden h-full w-full object-cover lg:block"
-      />
-      <img
-        src="/images/featured-venue/featured-tabletss.png"
-        alt=""
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover lg:hidden"
+        fill
+        loading="eager"
+        sizes="100vw"
+        className="pointer-events-none object-cover"
       />
       <div className="absolute inset-0 bg-black/45 lg:bg-black/35" />
 
@@ -225,7 +233,7 @@ export default function FeaturedSection() {
             ref={scrollerRef}
             className="flex gap-4 overflow-x-auto scroll-smooth px-5 snap-x snap-mandatory md:gap-5 md:px-8 lg:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {visibleVenues.map((venue) => (
+            {visibleVenues.map((venue, index) => (
               <FeaturedCard
                 key={venue.id}
                 id={venue.id}
@@ -236,6 +244,7 @@ export default function FeaturedSection() {
                 parking={venue.parking}
                 price={venue.price}
                 image={venue.image}
+                eager={index < 4}
               />
             ))}
           </div>

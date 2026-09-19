@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ChevronDown, Menu, User } from "lucide-react";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
 import { useHeroData } from "@/lib/data/useherodata";
@@ -16,14 +17,22 @@ export function Header() {
   return (
     <header className="relative z-30 flex items-center justify-between px-4 py-4 md:px-6 md:py-5 lg:px-10 lg:py-6">
       <a href="/" className="shrink-0" onClick={closeDropdowns}>
-        <img
+        <Image
           src="/images/logo.svg"
           alt="Venuze"
+          width={188}
+          height={33}
+          preload
+          decoding="sync"
           className="hidden h-[33px] w-auto lg:block"
         />
-        <img
+        <Image
           src="/images/Venuze-icon.svg"
           alt="Venuze"
+          width={48}
+          height={33}
+          preload
+          decoding="sync"
           className="h-[33px] w-auto lg:hidden"
         />
       </a>

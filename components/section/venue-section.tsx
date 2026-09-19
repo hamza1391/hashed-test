@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useVenueData } from "@/lib/data/useVenueData";
 import { useUIStore } from "@/store/ui-store";
@@ -9,20 +10,25 @@ function VenueCard({
   title,
   count,
   image,
+  eager = false,
 }: {
   title: string;
   count: number;
   image: string;
+  eager?: boolean;
 }) {
   return (
     <article
       data-venue-card
-      className="relative h-[320px] w-[240px] shrink-0 snap-start overflow-hidden rounded-[20px] md:h-[360px] md:w-[270px] lg:h-[400px] lg:w-[301px]"
+      className="relative h-[320px] w-[240px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-[#1A1A1A] md:h-[360px] md:w-[270px] lg:h-[400px] lg:w-[301px]"
     >
-      <img
+      <Image
         src={image}
         alt={title}
-        className="absolute inset-0 h-full w-full object-cover"
+        fill
+        loading={eager ? "eager" : "lazy"}
+        sizes="(max-width: 768px) 240px, (max-width: 1024px) 270px, 301px"
+        className="object-cover"
       />
       <div
         className="absolute inset-0"
@@ -115,12 +121,13 @@ export default function VenueSection() {
           ref={scrollerRef}
           className="flex gap-4 overflow-x-auto scroll-smooth px-5 snap-x snap-mandatory md:gap-5 md:px-0 lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {venueCategories.map((venue) => (
+          {venueCategories.map((venue, index) => (
             <VenueCard
               key={venue.id}
               title={venue.title}
               count={venue.count}
               image={venue.image}
+              eager={index < 4}
             />
           ))}
         </div>

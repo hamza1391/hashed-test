@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import { Header } from "@/components/layout/header";
 import { SearchPanel } from "@/components/section/search-panel";
 import { useHeroData } from "@/lib/data/useherodata";
@@ -57,13 +58,18 @@ export default function HeroSection() {
   }, [closeDropdowns]);
 
   return (
-    <section className="relative isolate min-h-svh overflow-hidden">
-        <img
-          src={activeSlide.src}
-          alt=""
-          fetchPriority="high"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-        />
+    <section className="relative isolate min-h-svh overflow-hidden bg-[#1A0F0C]">
+      <Image
+        src={activeSlide.src}
+        alt=""
+        fill
+        preload
+        fetchPriority="high"
+        decoding="sync"
+        sizes="100vw"
+        quality={75}
+        className="pointer-events-none object-cover"
+      />
 
       <div className="relative z-10 flex min-h-svh flex-col">
         <Header />

@@ -29,6 +29,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={` ${poppins.variable} h-full antialiased`}
     >
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero/hero.svg"
+          fetchPriority="high"
+        />
+        <link rel="preload" as="image" href="/images/logo.svg" />
+        <link rel="preload" as="image" href="/images/Venuze-icon.svg" />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

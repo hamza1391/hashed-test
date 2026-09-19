@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import Image from "next/image";
 import { ContactForm } from "@/components/layout/contact-form";
 import {
   footerColumns,
@@ -54,9 +55,11 @@ export function Footer() {
         <div className="flex flex-col gap-8 md:gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
           <div className="min-w-0 flex-1">
             <div className="flex items-start gap-3 md:gap-4">
-              <img
+              <Image
                 src="/images/Venuze-icon.svg"
                 alt="Venuze"
+                width={48}
+                height={33}
                 className="mt-0.5 h-8 w-auto shrink-0 md:h-10"
               />
               <h2 className="text-[20px] font-semibold leading-[1.35] md:text-xl lg:max-w-[560px] lg:text-2xl lg:leading-snug">
