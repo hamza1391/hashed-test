@@ -20,7 +20,10 @@ export type DropdownId =
   | "mobileMenu"
   | "where"
   | "when"
-  | "guests";
+  | "guests"
+  | "compactWhere"
+  | "compactWhen"
+  | "compactGuests";
 
 type UIState = {
   listingTab: ListingTab;
@@ -63,7 +66,7 @@ type UIState = {
 export const useUIStore = create<UIState>((set, get) => ({
   listingTab: "venue",
   openDropdown: null,
-  locationId: "dubai",
+  locationId: "london",
   dateId: "anytime",
   guestsId: "10-20",
   languageId: "en",

@@ -9,11 +9,17 @@ export const languages = [
 ] as const;
 
 export const locations = [
+  { id: "london", label: "London, UK", shortLabel: "London" },
   { id: "dubai", label: "Dubai, UAE", shortLabel: "Dubai" },
   { id: "abudhabi", label: "Abu Dhabi, UAE", shortLabel: "Abu Dhabi" },
   { id: "sharjah", label: "Sharjah, UAE", shortLabel: "Sharjah" },
   { id: "doha", label: "Doha, Qatar", shortLabel: "Doha" },
 ] as const;
+
+export const currentUser = {
+  name: "John Snow",
+  avatar: "/images/avatar.svg",
+} as const;
 
 export const dates = [
   { id: "anytime", label: "Anytime" },
@@ -45,6 +51,7 @@ export function useHeroData() {
   return {
     listingOptions,
     languages,
+    currentUser,
     locations,
     dates,
     guestOptions,

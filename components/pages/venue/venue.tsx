@@ -5,7 +5,7 @@ import { useDestinationData } from "@/lib/data/useDestinationData";
 export default function Venue () {
 
     return (
-        <div className="bg-white">
+        <div className="bg-white pb-16 pt-8 md:pb-20 md:pt-10">
             <div className="mx-auto max-w-7xl px-5 md:px-8 lg:px-0">
                 <h1 className="text-center text-[28px] font-bold leading-[1.2] text-black md:text-[32px] lg:text-[40px]">
                     Discover Exceptional Destinations Across the Region

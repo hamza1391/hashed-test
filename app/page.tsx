@@ -6,7 +6,6 @@ import GrowSection from "@/components/section/grow-section";
 import PerfectSection from "@/components/section/perfect-section";
 import TestimonialSection from "@/components/section/testimonial-section";
 import DestinationSection from "@/components/section/destination-section";
-import { Footer } from "@/components/layout/footer";
 
 export default function Home() {
   return (
@@ -19,7 +18,6 @@ export default function Home() {
       <PerfectSection />
       <TestimonialSection />
       <DestinationSection />
-      <Footer />
     </>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import Image from "next/image";
-import { Header } from "@/components/layout/header";
 import { SearchPanel } from "@/components/section/search-panel";
 import { useHeroData } from "@/lib/data/useherodata";
 import { useUIStore } from "@/store/ui-store";
@@ -38,24 +36,8 @@ function SlideDots() {
 export default function HeroSection() {
   const { heroSlides } = useHeroData();
   const currentSlide = useUIStore((state) => state.currentSlide);
-  const closeDropdowns = useUIStore((state) => state.closeDropdowns);
   const activeSlide =
     heroSlides.find((slide) => slide.id === currentSlide) ?? heroSlides[0];
-
-  useEffect(() => { 
-    const handlePointerDown = () => closeDropdowns();
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeDropdowns();
-    };
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeDropdowns]);
 
   return (
     <section className="relative isolate min-h-svh overflow-hidden bg-[#1A0F0C]">
@@ -72,7 +54,10 @@ export default function HeroSection() {
       />
 
       <div className="relative z-10 flex min-h-svh flex-col">
-        <Header />
+        <div
+          aria-hidden
+          className="h-[65px] shrink-0 md:h-[73px] lg:h-[81px]"
+        />
 
         <div className="flex flex-1 flex-col items-center justify-center px-5 pb-16 pt-6 md:px-8 md:pb-20 lg:px-10">
           <h1 className="max-w-[300px] text-center text-[30px] font-semibold leading-[1.15] tracking-tight text-white md:max-w-[720px] md:text-[50px] lg:max-w-[840px] lg:text-[70px]">

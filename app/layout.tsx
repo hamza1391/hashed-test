@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono , Poppins } from "next/font/google";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -38,8 +40,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         <link rel="preload" as="image" href="/images/logo.svg" />
         <link rel="preload" as="image" href="/images/Venuze-icon.svg" />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/Venuze-Textcolor-Logo%202.svg"
+        />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
