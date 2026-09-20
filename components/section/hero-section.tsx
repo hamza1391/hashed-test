@@ -42,7 +42,7 @@ export default function HeroSection() {
   const activeSlide =
     heroSlides.find((slide) => slide.id === currentSlide) ?? heroSlides[0];
 
-  useEffect(() => {
+  useEffect(() => { 
     const handlePointerDown = () => closeDropdowns();
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeDropdowns();

@@ -38,6 +38,8 @@ type UIState = {
   featuredFavoriteIds: string[];
   trustedCarouselIndex: number;
   trustedCarouselMaxIndex: number;
+  testimonialCarouselIndex: number;
+  testimonialCarouselMaxIndex: number;
   setListingTab: (tab: ListingTab) => void;
   toggleDropdown: (id: DropdownId) => void;
   closeDropdowns: () => void;
@@ -54,6 +56,8 @@ type UIState = {
   toggleFeaturedFavorite: (id: string) => void;
   setTrustedCarouselMaxIndex: (maxIndex: number) => void;
   scrollTrustedCarousel: (direction: VenueCarouselDirection) => void;
+  setTestimonialCarouselMaxIndex: (maxIndex: number) => void;
+  scrollTestimonialCarousel: (direction: VenueCarouselDirection) => void;
 };
 
 export const useUIStore = create<UIState>((set, get) => ({
@@ -72,6 +76,8 @@ export const useUIStore = create<UIState>((set, get) => ({
   featuredFavoriteIds: [],
   trustedCarouselIndex: 0,
   trustedCarouselMaxIndex: 0,
+  testimonialCarouselIndex: 0,
+  testimonialCarouselMaxIndex: 0,
   setListingTab: (listingTab) => set({ listingTab, openDropdown: null }),
   toggleDropdown: (id) =>
     set({ openDropdown: get().openDropdown === id ? null : id }),
@@ -149,6 +155,28 @@ export const useUIStore = create<UIState>((set, get) => ({
       trustedCarouselIndex < trustedCarouselMaxIndex
     ) {
       set({ trustedCarouselIndex: trustedCarouselIndex + 1 });
+    }
+  },
+  setTestimonialCarouselMaxIndex: (testimonialCarouselMaxIndex) => {
+    const nextIndex = Math.min(
+      get().testimonialCarouselIndex,
+      testimonialCarouselMaxIndex
+    );
+    set({ testimonialCarouselMaxIndex, testimonialCarouselIndex: nextIndex });
+  },
+  scrollTestimonialCarousel: (direction) => {
+    const { testimonialCarouselIndex, testimonialCarouselMaxIndex } = get();
+
+    if (direction === "left" && testimonialCarouselIndex > 0) {
+      set({ testimonialCarouselIndex: testimonialCarouselIndex - 1 });
+      return;
+    }
+
+    if (
+      direction === "right" &&
+      testimonialCarouselIndex < testimonialCarouselMaxIndex
+    ) {
+      set({ testimonialCarouselIndex: testimonialCarouselIndex + 1 });
     }
   },
 }));

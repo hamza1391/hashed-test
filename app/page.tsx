@@ -3,6 +3,9 @@ import VenueSection from "@/components/section/venue-section";
 import FeaturedSection from "@/components/section/featured-section";
 import TrustedSection from "@/components/section/trusted-section";
 import GrowSection from "@/components/section/grow-section";
+import PerfectSection from "@/components/section/perfect-section";
+import TestimonialSection from "@/components/section/testimonial-section";
+import DestinationSection from "@/components/section/destination-section";
 import { Footer } from "@/components/layout/footer";
 
 export default function Home() {
@@ -13,6 +16,9 @@ export default function Home() {
       <FeaturedSection />
       <TrustedSection />
       <GrowSection />
+      <PerfectSection />
+      <TestimonialSection />
+      <DestinationSection />
       <Footer />
     </>
   );

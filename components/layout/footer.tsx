@@ -50,7 +50,7 @@ const socialIcons = {
 
 export function Footer() {
   return (
-    <footer className="overflow-hidden rounded-t-[50px] bg-black px-6 pb-8 pt-14 text-white md:px-10 md:pb-8 md:pt-16 lg:px-16 lg:pt-20 xl:px-24">
+    <footer className="relative z-0 overflow-hidden rounded-t-[50px] bg-black px-6 pb-8 pt-28 text-white md:px-10 md:pb-8 md:pt-32 lg:px-16 lg:pt-36 xl:px-24">
       <div className="mx-auto max-w-[1280px]">
         <div className="flex flex-col gap-8 md:gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
           <div className="min-w-0 flex-1">

@@ -202,7 +202,7 @@ export default function FeaturedSection() {
       />
       <div className="absolute inset-0 bg-black/45 lg:bg-black/35" />
 
-      <div className="relative z-10 mx-auto max-w-[1320px]">
+      <div className="relative z-10 mx-auto max-w-7xl">
         <h2 className="px-5 text-center text-[28px] font-bold text-white md:text-[36px] lg:text-[44px]">
           Featured Venues
         </h2>
@@ -231,7 +231,7 @@ export default function FeaturedSection() {
         <div className="mt-8 md:mt-10">
           <div
             ref={scrollerRef}
-            className="flex gap-4 overflow-x-auto scroll-smooth px-5 snap-x snap-mandatory md:gap-5 md:px-8 lg:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex gap-4 lg:overflow-x-hidden overflow-x-auto scroll-smooth px-5 snap-x snap-mandatory md:gap-5 md:px-8 lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {visibleVenues.map((venue, index) => (
               <FeaturedCard

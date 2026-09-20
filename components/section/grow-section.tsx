@@ -7,8 +7,8 @@ export default function GrowSection() {
   const { cta, ctaHref } = useGrowData();
 
   return (
-    <section className="relative z-20 bg-white pb-16 md:pb-20 lg:pb-24">
-      <div className="relative z-20 mx-auto -mt-[210px] max-w-[1320px] px-5 md:-mt-[160px] md:px-8 lg:-mt-[130px] lg:px-16">
+    <section className="relative z-20 bg-white">
+      <div className="relative z-20 mx-auto -mt-[210px] max-w-7xl px-5 md:-mt-[160px] md:px-8 lg:-mt-[130px] lg:px-0">
         <article
           className="relative overflow-hidden rounded-[32px] md:rounded-[28px] lg:rounded-[24px]"
           style={{
@@ -18,14 +18,14 @@ export default function GrowSection() {
         >
           <div className="relative flex flex-col md:flex-row md:items-end md:justify-between">
             <div className="relative z-20 shrink-0 overflow-visible px-6 pt-10 text-center md:px-10 md:py-8 md:text-left lg:px-14 lg:py-10">
-              <h2 className="text-[28px] font-bold leading-[1.2] tracking-tight text-white md:text-[30px] lg:text-[36px]">
+              <h2 className="text-[28px] font-semibold leading-[1.2] tracking-tight text-white md:text-[30px] lg:text-[44px]">
                 <span className="md:whitespace-nowrap">
                   Grow Your Business with
                 </span>
                 <br />
                 Venuze
               </h2>
-              <p className="mx-auto mt-3 max-w-[280px] text-sm leading-relaxed text-white/95 md:mx-0 md:mt-3 md:max-w-none md:text-[13px] lg:text-sm">
+              <p className="mx-auto mt-3 max-w-[280px] text-sm leading-relaxed text-white/95 md:mx-0 md:mt-3 md:max-w-none md:text-[13px] lg:text-xl">
                 <span className="md:block">
                   Showcase your services to thousands of event organizers and
                   creators{" "}
@@ -37,14 +37,14 @@ export default function GrowSection() {
                     alt=""
                     width={199}
                     height={59}
-                    className="pointer-events-none absolute top-1/2 left-[calc(100%+16px)] z-30 hidden w-[199px] max-w-none -translate-y-[38%] lg:block"
+                    className="pointer-events-none absolute top-1/2 left-[calc(100%+192px)] z-30 hidden w-[199px] max-w-none -translate-y-[30%] lg:block"
                   />
                   <Image
                     src="/images/grow/tablet-vector.svg"
                     alt=""
                     width={84}
                     height={27}
-                    className="pointer-events-none absolute top-1/2 left-[calc(100%+10px)] z-30 hidden w-[84px] max-w-none -translate-y-1/2 md:block lg:hidden"
+                    className="pointer-events-none absolute bottom-12 left-[calc(100%+200px)] z-30 hidden w-[84px] max-w-none -translate-y-1/2 md:block lg:hidden"
                   />
                 </span>
               </p>
