@@ -151,45 +151,43 @@ Server state (catalog, homepage content, venue search, contact submit) goes thro
 
 ## State management approach
 
-Two Zustand stores. No React Context for UI state. No URL library beyond Next search params.
+**TanStack Query** owns server state. **Zustand** owns UI chrome. Applied city/guests/tab for results live in the **URL**.
+
+### TanStack Query (`hooks/`)
+
+| Hook | Source | Used by |
+| --- | --- | --- |
+| `useCatalog` | `GET /api/catalog` | Header, hero search, listing categories/filters |
+| `useHomeContent` | `GET /api/home` | Landing sections |
+| `useVenueListingsQuery` | `GET /api/venues` | Listing grid, map, results bar |
+| `useSubmitContact` | `POST /api/contact` | Footer contact form |
+
+`useVenueListingsQuery` sends URL params plus Zustand keywords, category, sort, and applied filters. The route runs `searchVenueListings()`. Vendors tab returns no rows. `keepPreviousData` keeps the last list visible while a new query loads.
 
 ### `store/ui-store.ts` — shared UI
 
-Used on landing and listing:
-
-- Hero / compact search: `locationId`, `dateId`, `guestsId`, `listingTab`
+- Hero / compact search fields: `locationId`, `dateId`, `guestsId`, `listingTab`
 - Which dropdown is open: `openDropdown` (one at a time)
 - Language, hero slide, carousel indexes, featured category and favorites
 
-Selecting a location/date/guests updates the store immediately (so the dropdown labels change). **Results do not change until Search is clicked**, because listing filters read the URL, not these fields.
+Selecting a location/date/guests updates the store immediately (dropdown labels). **Results do not change until Search is clicked**, because listings read the URL.
 
-After navigation, `/venue` syncs the URL back into this store so the compact header shows the applied search.
+### `store/venue-store.ts` — listing UI only
 
-### `store/venue-store.ts` — listing only
-
-- Keyword draft + chips
-- Category tab and horizontal offset
-- Sort
+- Keyword draft + chips, category tab, sort
 - Draft vs applied filters (dialog edits `draftFilters`; Apply copies to `appliedFilters`)
-- Selected venue (card + map pin stay in sync)
-
-`useFilteredVenueListings()`:
-
-1. Reads `where`, `when`, `guests`, `tab` from `useSearchParams`
-2. If `tab=vendors`, returns no results (no vendor dataset)
-3. Otherwise filters mock listings by `locationId`, minimum guest capacity, category, keywords, and applied filters
-4. Sorts by the selected sort option
+- Selected venue (card + map pin)
 
 Default applied filters match the listing screenshot chips: Verified, Parking, Kitchen, min size 2000 sq ft.
 
 ### Dropdowns
 
-`components/ui/dropdown.tsx` is controlled entirely by `openDropdown` in the UI store. Opening one id closes any other.
+`components/ui/dropdown.tsx` is controlled by `openDropdown` in the UI store.
 
 ### What is *not* in Zustand
 
-- **Applied search (city / guests / tab)** for results: URL search params  
-- **Venue content:** static modules under `lib/data/`
+- Applied search (city / guests / tab) for results: URL + Query
+- Listing rows and homepage copy: Query → API routes → `lib/data/`
 
 ---
 
