@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, SlidersHorizontal } from "lucide-react";
+import { countAppliedFilters } from "@/lib/venues/filters";
 import { useVenueListingStore } from "@/store/venue-store";
 
 export function VenueSearchBar() {
@@ -8,6 +9,9 @@ export function VenueSearchBar() {
   const setKeywordDraft = useVenueListingStore((state) => state.setKeywordDraft);
   const addKeyword = useVenueListingStore((state) => state.addKeyword);
   const openFilters = useVenueListingStore((state) => state.openFilters);
+  const appliedFilters = useVenueListingStore((state) => state.appliedFilters);
+  const keywords = useVenueListingStore((state) => state.keywords);
+  const filterCount = countAppliedFilters(appliedFilters, keywords);
 
   return (
     <div className="flex items-center gap-3 border-b border-[#EFEFEF] px-4 py-3 md:px-6 lg:px-8">
@@ -33,6 +37,11 @@ export function VenueSearchBar() {
       >
         <SlidersHorizontal className="size-4" />
         Filters
+        {filterCount > 0 ? (
+          <span className="flex size-[18px] items-center justify-center rounded-full bg-black text-[10px] font-semibold leading-none text-white">
+            {filterCount}
+          </span>
+        ) : null}
       </button>
     </div>
   );

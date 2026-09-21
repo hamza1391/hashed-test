@@ -31,6 +31,17 @@ function createPin() {
   });
 }
 
+function InvalidateSize() {
+  const map = useMap();
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => map.invalidateSize());
+    return () => cancelAnimationFrame(frame);
+  }, [map]);
+
+  return null;
+}
+
 function FlyToSelected({ venues }: { venues: VenueListing[] }) {
   const map = useMap();
   const selectedVenueId = useVenueListingStore((state) => state.selectedVenueId);
@@ -62,8 +73,15 @@ function useIsDesktopMap() {
   return enabled;
 }
 
-export default function VenueMap({ venues }: { venues: VenueListing[] }) {
-  const showMap = useIsDesktopMap();
+export default function VenueMap({
+  venues,
+  active = false,
+}: {
+  venues: VenueListing[];
+  active?: boolean;
+}) {
+  const isDesktop = useIsDesktopMap();
+  const showMap = active || isDesktop;
   const selectedVenueId = useVenueListingStore((state) => state.selectedVenueId);
   const setSelectedVenueId = useVenueListingStore(
     (state) => state.setSelectedVenueId
@@ -97,6 +115,7 @@ export default function VenueMap({ venues }: { venues: VenueListing[] }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
+        <InvalidateSize />
         <FlyToSelected venues={mappableVenues} />
         {mappableVenues.map((venue) => {
           const position = toLatLng(venue.lat, venue.lng);
@@ -115,7 +134,7 @@ export default function VenueMap({ venues }: { venues: VenueListing[] }) {
       </MapContainer>
 
       {selected ? (
-        <div className="absolute left-1/2 top-8 z-[2] w-[210px] -translate-x-1/2 overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_rgba(0,0,0,0.16)]">
+        <div className="absolute left-1/2 top-8 z-[2] hidden w-[210px] -translate-x-1/2 overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_rgba(0,0,0,0.16)] lg:block">
           <div className="relative h-[118px] w-full">
             <Image
               src={selected.images[0]}
@@ -140,7 +159,7 @@ export default function VenueMap({ venues }: { venues: VenueListing[] }) {
       <button
         type="button"
         aria-label="Expand map"
-        className="absolute right-3 top-3 z-[2] flex size-8 cursor-pointer items-center justify-center rounded-md border border-[#E6E6E6] bg-white text-black shadow-sm"
+        className="absolute right-3 top-3 z-[2] hidden size-8 cursor-pointer items-center justify-center rounded-md border border-[#E6E6E6] bg-white text-black shadow-sm lg:flex"
       >
         <Maximize2 className="size-4" />
       </button>

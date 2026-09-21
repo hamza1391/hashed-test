@@ -22,6 +22,7 @@ type VenueListingState = {
   draftFilters: VenueFilters;
   appliedFilters: VenueFilters;
   selectedVenueId: string | null;
+  tabletMapOpen: boolean;
   setKeywordDraft: (value: string) => void;
   addKeyword: () => void;
   removeKeyword: (keyword: string) => void;
@@ -40,6 +41,7 @@ type VenueListingState = {
     value?: string
   ) => void;
   setSelectedVenueId: (id: string | null) => void;
+  setTabletMapOpen: (open: boolean) => void;
 };
 
 function toggleValue(list: string[], value: string) {
@@ -58,6 +60,7 @@ export const useVenueListingStore = create<VenueListingState>((set, get) => ({
   draftFilters: defaultVenueFilters,
   appliedFilters: defaultVenueFilters,
   selectedVenueId: "ps-3",
+  tabletMapOpen: false,
   setKeywordDraft: (keywordDraft) => set({ keywordDraft }),
   addKeyword: () => {
     const next = get().keywordDraft.trim();
@@ -127,4 +130,5 @@ export const useVenueListingStore = create<VenueListingState>((set, get) => ({
     set({ appliedFilters, draftFilters: appliedFilters });
   },
   setSelectedVenueId: (selectedVenueId) => set({ selectedVenueId }),
+  setTabletMapOpen: (tabletMapOpen) => set({ tabletMapOpen }),
 }));

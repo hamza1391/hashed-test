@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, X } from "lucide-react";
+import { AlignJustify, ChevronDown, List, X } from "lucide-react";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
 import { useCatalog } from "@/hooks/use-catalog";
 import { useVenueListingsQuery } from "@/hooks/use-venue-listings";
@@ -22,6 +22,10 @@ export function VenueResultsBar() {
   const removeKeyword = useVenueListingStore((state) => state.removeKeyword);
   const removeAppliedChip = useVenueListingStore(
     (state) => state.removeAppliedChip
+  );
+  const tabletMapOpen = useVenueListingStore((state) => state.tabletMapOpen);
+  const setTabletMapOpen = useVenueListingStore(
+    (state) => state.setTabletMapOpen
   );
 
   const location =
@@ -91,24 +95,39 @@ export function VenueResultsBar() {
         near {location}
       </p>
 
-      {chips.map((chip) => (
-        <span
-          key={chip.key}
-          className="inline-flex items-center gap-1 rounded-full border border-[#E6E6E6] bg-white px-2.5 py-1 text-xs text-[#4A4A4A]"
-        >
-          {chip.label}
-          <button
-            type="button"
-            aria-label={`Remove ${chip.label}`}
-            onClick={chip.onRemove}
-            className="cursor-pointer text-[#8A8A8A] hover:text-black"
+      <div className="hidden lg:contents">
+        {chips.map((chip) => (
+          <span
+            key={chip.key}
+            className="inline-flex items-center gap-1 rounded-full border border-[#E6E6E6] bg-white px-2.5 py-1 text-xs text-[#4A4A4A]"
           >
-            <X className="size-3" />
-          </button>
-        </span>
-      ))}
+            {chip.label}
+            <button
+              type="button"
+              aria-label={`Remove ${chip.label}`}
+              onClick={chip.onRemove}
+              className="cursor-pointer text-[#8A8A8A] hover:text-black"
+            >
+              <X className="size-3" />
+            </button>
+          </span>
+        ))}
+      </div>
 
-      <div className="ml-auto">
+      <button
+        type="button"
+        onClick={() => setTabletMapOpen(!tabletMapOpen)}
+        className="ml-auto inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full border border-[#E6E6E6] bg-white px-3.5 py-1.5 text-sm text-[#4A4A4A] shadow-[0_1px_2px_rgba(0,0,0,0.04)] lg:hidden"
+      >
+        {tabletMapOpen ? (
+          <List className="size-4" />
+        ) : (
+          <AlignJustify className="size-4" />
+        )}
+        {tabletMapOpen ? "Show List" : "Show Map"}
+      </button>
+
+      <div className="ml-auto hidden lg:block">
         <Dropdown
           id="venueSort"
           align="right"

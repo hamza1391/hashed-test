@@ -30,6 +30,7 @@ export default function Venue() {
   const setSelectedVenueId = useVenueListingStore(
     (state) => state.setSelectedVenueId
   );
+  const tabletMapOpen = useVenueListingStore((state) => state.tabletMapOpen);
   const empty = !isPending && !isError && results.length === 0;
 
   useEffect(() => {
@@ -54,28 +55,46 @@ export default function Venue() {
   }, [empty, isPending, results, selectedVenueId, setSelectedVenueId]);
 
   return (
-    <div className="flex h-[calc(100svh-132px)] flex-col overflow-hidden bg-white md:h-[calc(100svh-80px)] lg:h-[calc(100svh-84px)]">
-      <VenueSearchBar />
-      <VenueCategories />
+    <div
+      className={`bg-white ${
+        tabletMapOpen
+          ? "flex h-[calc(100svh-132px)] flex-col overflow-hidden md:h-[calc(100svh-80px)] lg:h-[calc(100svh-84px)]"
+          : ""
+      } lg:flex lg:h-[calc(100svh-84px)] lg:flex-col lg:overflow-hidden`}
+    >
+      <div className="shrink-0">
+        <VenueSearchBar />
+        <VenueCategories />
+      </div>
 
       {isPending ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-[#8A8A8A]">
+        <div className="flex min-h-[420px] flex-1 items-center justify-center text-sm text-[#8A8A8A] lg:min-h-0">
           Loading venues…
         </div>
       ) : isError || empty ? (
         <VenueEmptyState />
       ) : (
-        <div className="flex min-h-0 flex-1">
-          <div className="min-w-0 flex-1 overflow-y-auto">
-            <VenueResultsBar />
-            <div className="grid grid-cols-1 gap-4 px-4 pb-6 md:grid-cols-2 md:px-5 lg:grid-cols-3">
-              {results.map((venue) => (
-                <VenueCard key={venue.id} venue={venue} />
-              ))}
+        <div className="flex min-h-0 flex-1 flex-col">
+          <VenueResultsBar />
+          <div className="flex min-h-0 flex-1">
+            <div
+              className={`min-w-0 flex-1 lg:overflow-y-auto ${
+                tabletMapOpen ? "hidden lg:block" : ""
+              }`}
+            >
+              <div className="grid grid-cols-1 gap-4 px-4 pb-6 md:grid-cols-2 md:px-5 lg:grid-cols-3">
+                {results.map((venue) => (
+                  <VenueCard key={venue.id} venue={venue} />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="relative z-0 hidden h-full w-[38%] shrink-0 overflow-hidden lg:block">
-            <VenueMap venues={results} />
+            <div
+              className={`relative z-0 min-h-0 overflow-hidden ${
+                tabletMapOpen ? "block min-h-0 flex-1" : "hidden"
+              } lg:block lg:h-full lg:w-[38%] lg:flex-none`}
+            >
+              <VenueMap venues={results} active={tabletMapOpen} />
+            </div>
           </div>
         </div>
       )}

@@ -33,3 +33,17 @@ export const emptyVenueFilters: VenueFilters = {
   verifiedOnly: false,
   minSize: null,
 };
+
+export function countAppliedFilters(
+  filters: VenueFilters,
+  keywords: string[] = []
+) {
+  return (
+    (filters.verifiedOnly ? 1 : 0) +
+    (filters.minSize ? 1 : 0) +
+    filters.amenities.length +
+    filters.venueTypes.length +
+    filters.occasions.length +
+    keywords.length
+  );
+}

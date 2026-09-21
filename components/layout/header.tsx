@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -242,7 +242,7 @@ function LandingBar() {
   );
 }
 
-function CompactBar() {
+function CompactBar({ hideSearch }: { hideSearch: boolean }) {
   return (
     <div className="px-3 pt-3 md:relative md:flex md:items-center md:justify-between md:px-6 md:py-3.5 lg:px-10 lg:py-4">
       <div className="rounded-[20px] bg-white p-3 shadow-[0px_4px_10px_0px_#0000001A] md:contents md:rounded-none md:bg-transparent md:p-0 md:shadow-none">
@@ -254,7 +254,11 @@ function CompactBar() {
             <ListingLanguageProfile compact />
           </div>
         </div>
-        <div className="mt-3 md:order-2 md:mx-5 md:mt-0 md:w-[300px] lg:absolute lg:left-1/2 lg:mx-0 lg:w-full lg:max-w-[420px] lg:-translate-x-1/2">
+        <div
+          className={`mt-3 md:order-2 md:mx-5 md:mt-0 md:w-[300px] lg:absolute lg:left-1/2 lg:mx-0 lg:w-full lg:max-w-[420px] lg:-translate-x-1/2 ${
+            hideSearch ? "max-lg:hidden" : ""
+          }`}
+        >
           <CompactSearch />
         </div>
       </div>
@@ -265,7 +269,11 @@ function CompactBar() {
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isVenue = pathname.startsWith("/venue");
   const [scrolled, setScrolled] = useState(false);
+  const [hideCompactSearch, setHideCompactSearch] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const headerRef = useRef<HTMLElement>(null);
   const closeDropdowns = useUIStore((state) => state.closeDropdowns);
   const compact = !isHome || scrolled;
 
@@ -280,6 +288,46 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
+
+  useEffect(() => {
+    if (!isVenue) {
+      setHideCompactSearch(false);
+      return;
+    }
+
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        setHideCompactSearch(false);
+        lastY = window.scrollY;
+        return;
+      }
+
+      const y = window.scrollY;
+      if (y > lastY && y > 16) {
+        setHideCompactSearch(true);
+        closeDropdowns();
+      } else if (y < lastY) {
+        setHideCompactSearch(false);
+      }
+      lastY = y;
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [closeDropdowns, isVenue]);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header || isHome) return;
+
+    const updateHeight = () => setHeaderHeight(header.getBoundingClientRect().height);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, [compact, hideCompactSearch, isHome, pathname]);
 
   useEffect(() => {
     const handlePointerDown = () => closeDropdowns();
@@ -303,18 +351,20 @@ export function Header() {
   return (
     <>
       <header
+        ref={headerRef}
         className={`fixed inset-x-0 top-0 z-50 transition-colors ${
           compact
             ? "bg-transparent md:bg-white md:shadow-[0px_4px_10px_0px_#0000001A]"
             : "bg-transparent"
         }`}
       >
-        {compact ? <CompactBar /> : <LandingBar />}
+        {compact ? <CompactBar hideSearch={hideCompactSearch} /> : <LandingBar />}
       </header>
       {!isHome ? (
         <div
           aria-hidden
           className="h-[132px] shrink-0 md:h-[80px] lg:h-[84px]"
+          style={headerHeight ? { height: headerHeight } : undefined}
         />
       ) : null}
     </>
