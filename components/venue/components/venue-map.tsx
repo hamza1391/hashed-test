@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import L from "leaflet";
 import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import { Maximize2, MapPin } from "lucide-react";
@@ -8,6 +8,15 @@ import Image from "next/image";
 import type { VenueListing } from "@/lib/venues/types";
 import { useVenueListingStore } from "@/store/venue-store";
 import "leaflet/dist/leaflet.css";
+
+const DEFAULT_CENTER: [number, number] = [51.5074, -0.1278];
+
+function toLatLng(lat: unknown, lng: unknown): [number, number] | null {
+  const nextLat = Number(lat);
+  const nextLng = Number(lng);
+  if (!Number.isFinite(nextLat) || !Number.isFinite(nextLng)) return null;
+  return [nextLat, nextLng];
+}
 
 function createPin() {
   return L.divIcon({
@@ -25,27 +34,55 @@ function createPin() {
 function FlyToSelected({ venues }: { venues: VenueListing[] }) {
   const map = useMap();
   const selectedVenueId = useVenueListingStore((state) => state.selectedVenueId);
-  const selected = venues.find((venue) => venue.id === selectedVenueId) ?? venues[0];
+  const selected =
+    venues.find((venue) => venue.id === selectedVenueId) ?? venues[0];
+  const lat = selected?.lat;
+  const lng = selected?.lng;
 
   useEffect(() => {
-    if (!selected) return;
-    map.flyTo([selected.lat, selected.lng], 13, { duration: 0.6 });
-  }, [map, selected]);
+    const position = toLatLng(lat, lng);
+    if (!position) return;
+    map.flyTo(position, 13, { duration: 0.6 });
+  }, [lat, lng, map]);
 
   return null;
 }
 
+function useIsDesktopMap() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setEnabled(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  return enabled;
+}
+
 export default function VenueMap({ venues }: { venues: VenueListing[] }) {
+  const showMap = useIsDesktopMap();
   const selectedVenueId = useVenueListingStore((state) => state.selectedVenueId);
   const setSelectedVenueId = useVenueListingStore(
     (state) => state.setSelectedVenueId
   );
   const pin = useMemo(() => createPin(), []);
+  const mappableVenues = useMemo(
+    () => venues.filter((venue) => toLatLng(venue.lat, venue.lng)),
+    [venues]
+  );
   const selected =
-    venues.find((venue) => venue.id === selectedVenueId) ?? venues[0];
-  const center: [number, number] = selected
-    ? [selected.lat, selected.lng]
-    : [51.5074, -0.1278];
+    mappableVenues.find((venue) => venue.id === selectedVenueId) ??
+    mappableVenues[0];
+  const center = selected
+    ? toLatLng(selected.lat, selected.lng) ?? DEFAULT_CENTER
+    : DEFAULT_CENTER;
+
+  if (!showMap || mappableVenues.length === 0) {
+    return <div className="h-full min-h-[420px] bg-[#e8e4dc]" />;
+  }
 
   return (
     <div className="relative h-full min-h-[420px] overflow-hidden bg-[#e8e4dc]">
@@ -60,17 +97,21 @@ export default function VenueMap({ venues }: { venues: VenueListing[] }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
-        <FlyToSelected venues={venues} />
-        {venues.map((venue) => (
-          <Marker
-            key={venue.id}
-            position={[venue.lat, venue.lng]}
-            icon={pin}
-            eventHandlers={{
-              click: () => setSelectedVenueId(venue.id),
-            }}
-          />
-        ))}
+        <FlyToSelected venues={mappableVenues} />
+        {mappableVenues.map((venue) => {
+          const position = toLatLng(venue.lat, venue.lng);
+          if (!position) return null;
+          return (
+            <Marker
+              key={venue.id}
+              position={position}
+              icon={pin}
+              eventHandlers={{
+                click: () => setSelectedVenueId(venue.id),
+              }}
+            />
+          );
+        })}
       </MapContainer>
 
       {selected ? (

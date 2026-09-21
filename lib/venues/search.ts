@@ -3,7 +3,6 @@ import {
   venueListings,
 } from "@/lib/data/useVenueListingData";
 import { guestRangeFromId } from "@/lib/search/venue-params";
-import type { ListingTab } from "@/store/ui-store";
 import {
   defaultVenueFilters,
   type VenueFilters,
@@ -18,7 +17,7 @@ export type VenueListingsQuery = {
   locationId: string;
   dateId: string;
   guestsId: string;
-  listingTab: ListingTab;
+  listingTab: "venue" | "vendors";
   categoryId: VenueListingCategoryId;
   sortId: VenueSortId;
   keywords: string[];
@@ -131,4 +130,30 @@ export function searchVenueListings(
         : (category?.totalCount ?? results.length);
 
   return { results, displayCount, category };
+}
+
+export function searchVenueListingsFromParams(
+  params: URLSearchParams
+): VenueListingsResponse {
+  let filters = defaultVenueFilters;
+  const rawFilters = params.get("filters");
+  if (rawFilters) {
+    try {
+      filters = { ...defaultVenueFilters, ...JSON.parse(rawFilters) };
+    } catch {
+      filters = defaultVenueFilters;
+    }
+  }
+
+  return searchVenueListings({
+    locationId: params.get("where") ?? "london",
+    dateId: params.get("when") ?? "anytime",
+    guestsId: params.get("guests") ?? "10-20",
+    listingTab: params.get("tab") === "vendors" ? "vendors" : "venue",
+    categoryId:
+      (params.get("category") as VenueListingCategoryId) ?? "photo-studio",
+    sortId: (params.get("sort") as VenueSortId) ?? "recommended",
+    keywords: (params.get("keywords") ?? "").split(",").filter(Boolean),
+    filters,
+  });
 }
