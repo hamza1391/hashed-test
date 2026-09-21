@@ -61,20 +61,20 @@ export function CompactSearch({ className = "" }: { className?: string }) {
   const locationId = useUIStore((state) => state.locationId);
   const dateId = useUIStore((state) => state.dateId);
   const guestsId = useUIStore((state) => state.guestsId);
-  const listingTab = useUIStore((state) => state.listingTab);
   const setLocationId = useUIStore((state) => state.setLocationId);
   const setDateId = useUIStore((state) => state.setDateId);
   const setGuestsId = useUIStore((state) => state.setGuestsId);
-  const closeDropdowns = useUIStore((state) => state.closeDropdowns);
 
   function handleSearch() {
-    closeDropdowns();
+    const snapshot = useUIStore.getState();
+    snapshot.closeDropdowns();
     router.push(
       buildVenueSearchPath({
-        locationId,
-        dateId,
-        guestsId,
-        listingTab,
+        locationId: snapshot.locationId,
+        dateId: snapshot.dateId,
+        guestsId: snapshot.guestsId,
+        listingTab: snapshot.listingTab,
+        categoryId: "all",
       })
     );
   }

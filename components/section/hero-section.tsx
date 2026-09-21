@@ -40,20 +40,22 @@ export default function HeroSection() {
     heroSlides.find((slide) => slide.id === currentSlide) ?? heroSlides[0];
 
   return (
-    <section className="relative isolate min-h-svh overflow-hidden bg-[#1A0F0C]">
-      <Image
-        src={activeSlide?.src ?? "/images/hero/hero.svg"}
-        alt=""
-        fill
-        preload
-        fetchPriority="high"
-        decoding="sync"
-        sizes="100vw"
-        quality={75}
-        className="pointer-events-none object-cover"
-      />
+    <section className="relative isolate min-h-svh bg-[#1A0F0C]">
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src={activeSlide?.src ?? "/images/hero/hero.svg"}
+          alt=""
+          fill
+          preload
+          fetchPriority="high"
+          decoding="sync"
+          sizes="100vw"
+          quality={75}
+          className="pointer-events-none object-cover"
+        />
+      </div>
 
-      <div className="relative z-10 flex min-h-svh flex-col">
+      <div className="relative z-30 flex min-h-svh flex-col">
         <div
           aria-hidden
           className="h-[65px] shrink-0 md:h-[73px] lg:h-[81px]"

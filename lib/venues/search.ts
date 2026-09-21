@@ -2,7 +2,10 @@ import {
   venueListingCategories,
   venueListings,
 } from "@/lib/data/useVenueListingData";
-import { guestRangeFromId } from "@/lib/search/venue-params";
+import {
+  matchesGuestCapacity,
+  matchesVenueDate,
+} from "@/lib/search/venue-params";
 import {
   defaultVenueFilters,
   type VenueFilters,
@@ -22,6 +25,8 @@ export type VenueListingsQuery = {
   sortId: VenueSortId;
   keywords: string[];
   filters: VenueFilters;
+  guestsSpecified?: boolean;
+  dateSpecified?: boolean;
 };
 
 export type VenueListingsResponse = {
@@ -36,10 +41,18 @@ export function matchesVenueFilters(
   keywords: string[],
   categoryId: VenueListingCategoryId,
   locationId: string,
-  guestsId: string
+  guestsId: string,
+  dateId = "anytime",
+  guestsSpecified = false,
+  dateSpecified = false
 ) {
   if (venue.locationId !== locationId) return false;
-  if (venue.capacity < guestRangeFromId(guestsId).min) return false;
+  if (!matchesGuestCapacity(venue.capacity, guestsId, guestsSpecified)) {
+    return false;
+  }
+  if (!matchesVenueDate(venue.availableDateIds, dateId, dateSpecified)) {
+    return false;
+  }
   if (categoryId !== "all" && venue.categoryId !== categoryId) return false;
   if (filters.verifiedOnly && !venue.verified) return false;
   if (filters.minSize && venue.sizeValue < filters.minSize) return false;
@@ -100,7 +113,10 @@ export function searchVenueListings(
               query.keywords,
               query.categoryId,
               query.locationId,
-              query.guestsId
+              query.guestsId,
+              query.dateId,
+              query.guestsSpecified,
+              query.dateSpecified
             )
           )
           .slice()
@@ -120,7 +136,9 @@ export function searchVenueListings(
     query.filters.capacityMax !== defaultVenueFilters.capacityMax ||
     query.filters.priceMin !== defaultVenueFilters.priceMin ||
     query.filters.priceMax !== defaultVenueFilters.priceMax ||
-    query.filters.minSize !== defaultVenueFilters.minSize;
+    query.filters.minSize !== defaultVenueFilters.minSize ||
+    Boolean(query.guestsSpecified) ||
+    Boolean(query.dateSpecified);
 
   const displayCount =
     results.length === 0
@@ -155,5 +173,7 @@ export function searchVenueListingsFromParams(
     sortId: (params.get("sort") as VenueSortId) ?? "recommended",
     keywords: (params.get("keywords") ?? "").split(",").filter(Boolean),
     filters,
+    guestsSpecified: params.has("guests"),
+    dateSpecified: params.has("when") && params.get("when") !== "anytime",
   });
 }

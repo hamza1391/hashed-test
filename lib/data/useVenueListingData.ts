@@ -376,5 +376,135 @@ const regionalListings = otherCityCopies.flatMap((city) =>
 export const venueListings: VenueListing[] = [
   ...londonListings,
   ...regionalListings,
+  ...buildSearchMatchListings(),
 ];
+
+function buildSearchMatchListings(): VenueListing[] {
+  const cities = [
+    {
+      locationId: "london",
+      city: "London",
+      location: "London, UK",
+      lat: 51.5074,
+      lng: -0.1278,
+    },
+    ...otherCityCopies,
+  ];
+
+  const guestProfiles = [
+    { id: "10", capacity: 10, guests: "10", sizeValue: 2000 },
+    { id: "10-20", capacity: 16, guests: "10-20", sizeValue: 2100 },
+    { id: "20-50", capacity: 36, guests: "20-50", sizeValue: 2200 },
+    { id: "50+", capacity: 80, guests: "80+", sizeValue: 3200 },
+  ] as const;
+
+  const categorySeeds: {
+    id: VenueListingCategoryId;
+    types: string[];
+    titles: Record<string, string[]>;
+  }[] = [
+    {
+      id: "photo-studio",
+      types: ["Studio"],
+      titles: {
+        london: ["Shoreditch Daylight Studio", "Hackney Cyclorama Studio"],
+        dubai: ["Al Quoz Photo Studio", "Business Bay Light Studio"],
+        abudhabi: ["Saadiyat Natural Light Studio", "Yas Island Photo Loft"],
+        sharjah: ["Al Majaz Photo Studio", "University City Studio"],
+        doha: ["Msheireb Photo Studio", "The Pearl Cyclorama"],
+      },
+    },
+    {
+      id: "venue",
+      types: ["Ballroom", "Villa"],
+      titles: {
+        london: ["Southbank Celebration Hall", "Mayfair Private Venue"],
+        dubai: ["Palm Jumeirah Event Hall", "Downtown Dubai Venue"],
+        abudhabi: ["Corniche Celebration Pavilion", "Saadiyat Event Hall"],
+        sharjah: ["Al Qasba Event Hall", "Khalid Lagoon Venue"],
+        doha: ["West Bay Banquet Hall", "Katara Event Pavilion"],
+      },
+    },
+    {
+      id: "apartment",
+      types: ["Apartment", "House"],
+      titles: {
+        london: ["Canary Wharf Apartment Loft", "Camden Townhouse"],
+        dubai: ["Marina Skyline Apartment", "JBR Beach Apartment"],
+        abudhabi: ["Al Reem Skyline Apartment", "Saadiyat Beach Apartment"],
+        sharjah: ["Al Khan Apartment", "Corniche Sharjah Apartment"],
+        doha: ["Lusail Waterfront Apartment", "Porto Arabia Apartment"],
+      },
+    },
+    {
+      id: "restaurant",
+      types: ["Restaurant", "Bar"],
+      titles: {
+        london: ["Soho Private Dining Room", "Shoreditch Chef’s Table"],
+        dubai: ["DIFC Private Dining Room", "Jumeirah Restaurant Loft"],
+        abudhabi: ["Al Maryah Private Dining", "Corniche Chef’s Table"],
+        sharjah: ["Al Majaz Dining Room", "Sharjah Art District Kitchen"],
+        doha: ["Souq Waqif Private Dining", "Msheireb Chef’s Table"],
+      },
+    },
+    {
+      id: "gallery",
+      types: ["Gallery"],
+      titles: {
+        london: ["Whitechapel Exhibition Room", "Bankside Gallery"],
+        dubai: ["Alserkal Exhibition Room", "DIFC Art Gallery"],
+        abudhabi: ["Manarat Al Saadiyat Gallery", "Cultural District Gallery"],
+        sharjah: ["Sharjah Art Foundation Room", "Al Qasba Gallery"],
+        doha: ["Fire Station Gallery Room", "Katara Art Gallery"],
+      },
+    },
+  ];
+
+  return cities.flatMap((city, cityIndex) =>
+    categorySeeds.flatMap((category, categoryIndex) =>
+      guestProfiles.flatMap((profile, profileIndex) => {
+        const titles =
+          category.titles[city.locationId] ??
+          category.titles.london ??
+          [`${city.city} ${category.id}`];
+        const title = titles[profileIndex % titles.length];
+        const tomorrowFirst = profile.id === "20-50" || profileIndex % 2 === 1;
+        const availableDateIds = tomorrowFirst
+          ? ["tomorrow"]
+          : profileIndex === 0
+            ? ["today", "tomorrow"]
+            : ["anytime"];
+
+        return {
+          id: `search-${city.locationId}-${category.id}-${profile.id}-${categoryIndex}`,
+          title,
+          location: city.location,
+          city: city.city,
+          locationId: city.locationId,
+          guests: profile.guests,
+          size: `${profile.sizeValue.toLocaleString()} sq ft`,
+          parking: "Free parking",
+          extraAmenities: 12 + profileIndex,
+          price: 45 + cityIndex * 5 + profileIndex * 8,
+          images: [
+            cardImages[(cityIndex + profileIndex) % cardImages.length],
+            cardImages[(cityIndex + profileIndex + 2) % cardImages.length],
+          ],
+          verified: true,
+          categoryId: category.id,
+          venueTypes: category.types,
+          occasions: [
+            occasionOptions[(cityIndex + profileIndex) % occasionOptions.length],
+          ],
+          amenities: ["Parking", "Kitchen"],
+          capacity: profile.capacity,
+          sizeValue: profile.sizeValue,
+          lat: city.lat + ((categoryIndex + profileIndex) % 6) * 0.008,
+          lng: city.lng + ((categoryIndex + profileIndex) % 6) * 0.006,
+          availableDateIds,
+        } satisfies VenueListing;
+      })
+    )
+  );
+}
 

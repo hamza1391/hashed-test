@@ -99,7 +99,7 @@ export default function TrustedSection() {
   }, [trustedCarouselIndex]);
 
   return (
-    <section className="relative z-0 bg-[#fdf1d2] pt-12 pb-[240px] md:pt-16 md:pb-[190px] lg:pt-20 lg:pb-[160px]">
+    <section className="relative z-0 bg-[#fdf1d2] pt-12 pb-[240px] md:pt-16 md:pb-[190px] lg:pt-20 lg:pb-40">
       <div className="mx-auto max-w-[1320px] px-5 md:px-8 lg:px-10">
         <h2 className="text-center text-[28px] font-bold leading-[1.2] text-black md:text-[32px] lg:text-[40px]">
           Complete Your Event with our{" "}

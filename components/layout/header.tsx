@@ -329,20 +329,6 @@ export function Header() {
     return () => observer.disconnect();
   }, [compact, hideCompactSearch, isHome, pathname]);
 
-  useEffect(() => {
-    const handlePointerDown = () => closeDropdowns();
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeDropdowns();
-    };
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeDropdowns]);
 
   useEffect(() => {
     closeDropdowns();

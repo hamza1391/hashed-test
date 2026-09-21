@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { FilterDialog } from "@/components/venue/components/filter-dialog";
@@ -12,7 +12,10 @@ import { VenueSearchBar } from "@/components/venue/components/venue-search-bar";
 import { useVenueListingsQuery } from "@/hooks/use-venue-listings";
 import { parseVenueSearchParams } from "@/lib/search/venue-params";
 import { useUIStore } from "@/store/ui-store";
-import { useVenueListingStore } from "@/store/venue-store";
+import {
+  useVenueListingStore,
+  type VenueListingCategoryId,
+} from "@/store/venue-store";
 
 const VenueMap = dynamic(
   () => import("@/components/venue/components/venue-map"),
@@ -25,6 +28,7 @@ export default function Venue() {
   const setDateId = useUIStore((state) => state.setDateId);
   const setGuestsId = useUIStore((state) => state.setGuestsId);
   const setListingTab = useUIStore((state) => state.setListingTab);
+  const setCategoryId = useVenueListingStore((state) => state.setCategoryId);
   const { results, isPending, isError } = useVenueListingsQuery();
   const selectedVenueId = useVenueListingStore((state) => state.selectedVenueId);
   const setSelectedVenueId = useVenueListingStore(
@@ -32,15 +36,22 @@ export default function Venue() {
   );
   const tabletMapOpen = useVenueListingStore((state) => state.tabletMapOpen);
   const empty = !isPending && !isError && results.length === 0;
+  const lastSearchKey = useRef("");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const query = parseVenueSearchParams(searchParams);
     setLocationId(query.locationId);
     setDateId(query.dateId);
     setGuestsId(query.guestsId);
     setListingTab(query.listingTab);
+    const searchKey = `${query.locationId}|${query.dateId}|${query.guestsId}|${query.listingTab}|${query.categoryId ?? ""}`;
+    if (query.categoryId && searchKey !== lastSearchKey.current) {
+      lastSearchKey.current = searchKey;
+      setCategoryId(query.categoryId as VenueListingCategoryId);
+    }
   }, [
     searchParams,
+    setCategoryId,
     setDateId,
     setGuestsId,
     setListingTab,

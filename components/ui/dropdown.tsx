@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useEffect, useRef } from "react";
 import { useUIStore, type DropdownId } from "@/store/ui-store";
 
 type DropdownProps = {
@@ -18,15 +19,33 @@ export function Dropdown({
   trigger,
   children,
 }: DropdownProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const openDropdown = useUIStore((state) => state.openDropdown);
   const toggleDropdown = useUIStore((state) => state.toggleDropdown);
+  const closeDropdowns = useUIStore((state) => state.closeDropdowns);
   const open = openDropdown === id;
 
+  useEffect(() => {
+    if (!open) return;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) return;
+      closeDropdowns();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeDropdowns();
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [closeDropdowns, open]);
+
   return (
-    <div
-      className="relative"
-      onPointerDown={(event) => event.stopPropagation()}
-    >
+    <div className="relative" ref={rootRef}>
       {trigger({ open, toggle: () => toggleDropdown(id) })}
       {open ? (
         <div
@@ -53,6 +72,11 @@ export function DropdownItem({
   return (
     <button
       type="button"
+      onPointerDown={(event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        onClick();
+      }}
       onClick={onClick}
       className={`flex w-full cursor-pointer px-4 py-2.5 text-left text-sm transition-colors ${
         active

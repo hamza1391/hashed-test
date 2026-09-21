@@ -15,16 +15,14 @@ import {
   Video,
   Warehouse,
 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCatalog } from "@/hooks/use-catalog";
 import {
   useVenueListingStore,
   type VenueListingCategoryId,
 } from "@/store/venue-store";
 
-const categoryIcons: Record<
-  VenueListingCategoryId,
-  typeof LayoutGrid
-> = {
+const categoryIcons: Record<VenueListingCategoryId, typeof LayoutGrid> = {
   all: LayoutGrid,
   "photo-studio": Camera,
   "film-studio": Video,
@@ -39,16 +37,29 @@ const categoryIcons: Record<
 };
 
 export function VenueCategories() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const catalog = useCatalog();
   const venueListingCategories = catalog.data?.venueListingCategories ?? [];
-  const categoryId = useVenueListingStore((state) => state.categoryId);
+  const storeCategoryId = useVenueListingStore((state) => state.categoryId);
   const setCategoryId = useVenueListingStore((state) => state.setCategoryId);
   const categoryOffset = useVenueListingStore((state) => state.categoryOffset);
   const setCategoryOffset = useVenueListingStore(
     (state) => state.setCategoryOffset
   );
+  const categoryId =
+    (searchParams.get("category") as VenueListingCategoryId | null) ??
+    storeCategoryId;
 
   const maxOffset = Math.max(0, venueListingCategories.length - 8);
+
+  function selectCategory(id: VenueListingCategoryId) {
+    setCategoryId(id);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("category", id);
+    const query = params.toString();
+    router.replace(query ? `/venue?${query}` : "/venue", { scroll: false });
+  }
 
   return (
     <div className="flex items-center gap-2 border-b border-[#F0F0F0] px-3 py-3 md:px-5 lg:px-6">
@@ -73,7 +84,7 @@ export function VenueCategories() {
               <button
                 key={category.id}
                 type="button"
-                onClick={() => setCategoryId(category.id)}
+                onClick={() => selectCategory(category.id)}
                 className={`flex min-w-[76px] shrink-0 cursor-pointer flex-col items-center gap-1.5 rounded-2xl px-3 py-2 text-[11px] font-medium transition-colors md:min-w-[88px] md:text-xs ${
                   active
                     ? "bg-[#FFF1EE] text-brand"

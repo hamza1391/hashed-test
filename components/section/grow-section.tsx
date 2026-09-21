@@ -10,8 +10,8 @@ export default function GrowSection() {
   };
 
   return (
-    <section className="relative z-20 bg-white">
-      <div className="relative z-20 mx-auto -mt-[210px] max-w-7xl px-5 md:-mt-[160px] md:px-8 lg:-mt-[130px] lg:px-0">
+    <section className="relative z-10 bg-transparent pt-12  md:pt-16  lg:pt-0 ">
+      <div className="relative z-20 mx-auto -mt-[210px] max-w-7xl px-5 md:-mt-[160px] md:px-8 lg:-mt-[140px] lg:px-0">
         <article
           className="relative overflow-hidden rounded-[32px] md:rounded-[28px] lg:rounded-[24px]"
           style={{

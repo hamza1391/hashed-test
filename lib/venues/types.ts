@@ -34,4 +34,5 @@ export type VenueListing = {
   sizeValue: number;
   lat: number;
   lng: number;
+  availableDateIds?: string[];
 };

@@ -1,21 +1,24 @@
 "use client";
 
 import { useMemo } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { getVenueListings } from "@/lib/api/venues";
 import { queryKeys } from "@/lib/query/keys";
 import { parseVenueSearchParams } from "@/lib/search/venue-params";
 import { useVenueListingStore } from "@/store/venue-store";
+import type { VenueListingCategoryId } from "@/lib/venues/types";
 
 export function useVenueListingsQuery() {
   const searchParams = useSearchParams();
   const search = parseVenueSearchParams(searchParams);
   const keywords = useVenueListingStore((state) => state.keywords);
   const keywordDraft = useVenueListingStore((state) => state.keywordDraft);
-  const categoryId = useVenueListingStore((state) => state.categoryId);
+  const storeCategoryId = useVenueListingStore((state) => state.categoryId);
   const sortId = useVenueListingStore((state) => state.sortId);
   const appliedFilters = useVenueListingStore((state) => state.appliedFilters);
+  const categoryId =
+    (search.categoryId as VenueListingCategoryId | undefined) ?? storeCategoryId;
 
   const liveKeywords = useMemo(() => {
     const next = [...keywords];
@@ -34,13 +37,17 @@ export function useVenueListingsQuery() {
       sortId,
       keywords: liveKeywords,
       filters: appliedFilters,
+      guestsSpecified: search.guestsSpecified,
+      dateSpecified: search.dateSpecified,
     }),
     [
       appliedFilters,
       categoryId,
       liveKeywords,
       search.dateId,
+      search.dateSpecified,
       search.guestsId,
+      search.guestsSpecified,
       search.listingTab,
       search.locationId,
       sortId,
@@ -50,7 +57,6 @@ export function useVenueListingsQuery() {
   const listings = useQuery({
     queryKey: queryKeys.venues.list(query),
     queryFn: () => getVenueListings(query),
-    placeholderData: keepPreviousData,
   });
 
   return {
