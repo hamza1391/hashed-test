@@ -15,7 +15,7 @@ import {
   Video,
   Warehouse,
 } from "lucide-react";
-import { venueListingCategories } from "@/lib/data/useVenueListingData";
+import { useCatalog } from "@/hooks/use-catalog";
 import {
   useVenueListingStore,
   type VenueListingCategoryId,
@@ -39,6 +39,8 @@ const categoryIcons: Record<
 };
 
 export function VenueCategories() {
+  const catalog = useCatalog();
+  const venueListingCategories = catalog.data?.venueListingCategories ?? [];
   const categoryId = useVenueListingStore((state) => state.categoryId);
   const setCategoryId = useVenueListingStore((state) => state.setCategoryId);
   const categoryOffset = useVenueListingStore((state) => state.categoryOffset);
@@ -65,7 +67,7 @@ export function VenueCategories() {
           .slice(categoryOffset, categoryOffset + 11)
           .map((category) => {
             const active = category.id === categoryId;
-            const Icon = categoryIcons[category.id];
+            const Icon = categoryIcons[category.id] ?? LayoutGrid;
 
             return (
               <button

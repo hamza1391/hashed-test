@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { SearchPanel } from "@/components/section/search-panel";
-import { useHeroData } from "@/lib/data/useherodata";
+import { useCatalog } from "@/hooks/use-catalog";
 import { useUIStore } from "@/store/ui-store";
 
 function SlideDots() {
-  const { heroSlides } = useHeroData();
+  const heroSlides = useCatalog().data?.heroSlides ?? [];
   const currentSlide = useUIStore((state) => state.currentSlide);
   const setCurrentSlide = useUIStore((state) => state.setCurrentSlide);
 
@@ -34,7 +34,7 @@ function SlideDots() {
 }
 
 export default function HeroSection() {
-  const { heroSlides } = useHeroData();
+  const heroSlides = useCatalog().data?.heroSlides ?? [];
   const currentSlide = useUIStore((state) => state.currentSlide);
   const activeSlide =
     heroSlides.find((slide) => slide.id === currentSlide) ?? heroSlides[0];
@@ -42,7 +42,7 @@ export default function HeroSection() {
   return (
     <section className="relative isolate min-h-svh overflow-hidden bg-[#1A0F0C]">
       <Image
-        src={activeSlide.src}
+        src={activeSlide?.src ?? "/images/hero/hero.svg"}
         alt=""
         fill
         preload

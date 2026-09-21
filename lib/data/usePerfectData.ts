@@ -50,6 +50,3 @@ export const perfectCopy = {
     "Planning an event, production, or gathering shouldn't feel complicated. Our streamlined process connects you with the right venues and trusted professionals, taking the stress out of logistics so you can focus on what matters most  making it a success.",
 } as const;
 
-export function usePerfectData() {
-  return { perfectImages, perfectSteps, perfectCopy };
-}

@@ -12,7 +12,7 @@ import {
   Scaling,
   Users,
 } from "lucide-react";
-import { useFeaturedData } from "@/lib/data/useFeaturedData";
+import { useHomeContent } from "@/hooks/use-home-content";
 import { useUIStore } from "@/store/ui-store";
 
 function getCarouselMetrics(scroller: HTMLDivElement) {
@@ -137,7 +137,9 @@ function FeaturedCard({
 }
 
 export default function FeaturedSection() {
-  const { featuredCategories, featuredVenues } = useFeaturedData();
+  const home = useHomeContent();
+  const featuredCategories = home.data?.featuredCategories ?? [];
+  const featuredVenues = home.data?.featuredVenues ?? [];
   const scrollerRef = useRef<HTMLDivElement>(null);
   const featuredCategoryId = useUIStore((state) => state.featuredCategoryId);
   const setFeaturedCategory = useUIStore((state) => state.setFeaturedCategory);
@@ -203,7 +205,7 @@ export default function FeaturedSection() {
       <div className="absolute inset-0 bg-black/45 lg:bg-black/35" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <h2 className="px-5 text-center text-[28px] font-bold text-white md:text-[36px] lg:text-[44px]">
+        <h2 className="px-5 text-center text-[28px] font-semibold text-white md:text-[36px] lg:text-[44px]">
           Featured Venues
         </h2>
 
@@ -216,10 +218,10 @@ export default function FeaturedSection() {
                 key={category.id}
                 type="button"
                 onClick={() => setFeaturedCategory(category.id)}
-                className={`shrink-0 snap-center rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase transition-colors ${
+                className={`shrink-0 snap-center rounded-[10px] px-[30px] py-5 text-base  tracking-wide uppercase transition-colors ${
                   active
                     ? "bg-brand text-white"
-                    : "bg-black/40 text-white hover:bg-black/55"
+                    : "bg-[#b7b7b7]/50 text-white hover:bg-black/55"
                 }`}
               >
                 {category.label}
@@ -249,13 +251,13 @@ export default function FeaturedSection() {
             ))}
           </div>
 
-          <div className="mt-6 hidden justify-end gap-2 px-10 lg:flex">
+          <div className="mt-6 hidden justify-end gap-2 px-0 lg:flex">
             <button
               type="button"
               aria-label="Previous featured venues"
               disabled={featuredCarouselIndex <= 0}
               onClick={() => scrollFeaturedCarousel("left")}
-              className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-white text-black shadow-sm transition-opacity hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-transparent text-white shadow-sm transition-opacity hover:bg-transparent disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft className="size-5" />
             </button>
@@ -264,7 +266,7 @@ export default function FeaturedSection() {
               aria-label="Next featured venues"
               disabled={featuredCarouselIndex >= featuredCarouselMaxIndex}
               onClick={() => scrollFeaturedCarousel("right")}
-              className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-white text-black shadow-sm transition-opacity hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-transparent text-white shadow-sm transition-opacity hover:bg-transparent disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronRight className="size-5" />
             </button>

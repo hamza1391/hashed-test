@@ -60,6 +60,4 @@ export const featuredVenues: FeaturedVenue[] = featuredCategories.flatMap(
     }))
 );
 
-export function useFeaturedData() {
-  return { featuredCategories, featuredVenues };
-}
+

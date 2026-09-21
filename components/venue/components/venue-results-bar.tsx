@@ -2,14 +2,17 @@
 
 import { ChevronDown, X } from "lucide-react";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
-import { sortOptions } from "@/lib/data/useVenueListingData";
-import { useHeroData } from "@/lib/data/useherodata";
+import { useCatalog } from "@/hooks/use-catalog";
+import { useVenueListingsQuery } from "@/hooks/use-venue-listings";
 import { useUIStore } from "@/store/ui-store";
-import { useFilteredVenueListings, useVenueListingStore } from "@/store/venue-store";
+import { useVenueListingStore } from "@/store/venue-store";
 
 export function VenueResultsBar() {
-  const { displayCount, category } = useFilteredVenueListings();
-  const { locations, guestOptions } = useHeroData();
+  const { displayCount, category } = useVenueListingsQuery();
+  const catalog = useCatalog();
+  const locations = catalog.data?.locations ?? [];
+  const guestOptions = catalog.data?.guestOptions ?? [];
+  const sortOptions = catalog.data?.sortOptions ?? [];
   const locationId = useUIStore((state) => state.locationId);
   const guestsId = useUIStore((state) => state.guestsId);
   const appliedFilters = useVenueListingStore((state) => state.appliedFilters);

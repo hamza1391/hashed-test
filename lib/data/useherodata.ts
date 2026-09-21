@@ -47,15 +47,3 @@ export const heroSlides = [
   { id: 3, src: "/images/hero/hero.svg" },
 ] as const;
 
-export function useHeroData() {
-  return {
-    listingOptions,
-    languages,
-    currentUser,
-    locations,
-    dates,
-    guestOptions,
-    profileOptions,
-    heroSlides,
-  };
-}

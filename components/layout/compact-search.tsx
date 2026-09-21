@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
-import { useHeroData } from "@/lib/data/useherodata";
-import { buildVenueSearchPath } from "@/lib/venue-search";
+import { useCatalog } from "@/hooks/use-catalog";
+import { buildVenueSearchPath } from "@/lib/search/venue-params";
 import { useUIStore, type DropdownId } from "@/store/ui-store";
 
 function CompactField({
@@ -54,7 +54,10 @@ function CompactField({
 
 export function CompactSearch({ className = "" }: { className?: string }) {
   const router = useRouter();
-  const { locations, dates, guestOptions } = useHeroData();
+  const catalog = useCatalog();
+  const locations = catalog.data?.locations ?? [];
+  const dates = catalog.data?.dates ?? [];
+  const guestOptions = catalog.data?.guestOptions ?? [];
   const locationId = useUIStore((state) => state.locationId);
   const dateId = useUIStore((state) => state.dateId);
   const guestsId = useUIStore((state) => state.guestsId);
@@ -77,10 +80,20 @@ export function CompactSearch({ className = "" }: { className?: string }) {
   }
 
   const location =
-    locations.find((item) => item.id === locationId) ?? locations[0];
-  const date = dates.find((item) => item.id === dateId) ?? dates[0];
+    locations.find((item) => item.id === locationId) ?? locations[0] ?? {
+      id: "london",
+      label: "London, UK",
+      shortLabel: "London",
+    };
+  const date = dates.find((item) => item.id === dateId) ?? dates[0] ?? {
+    id: "anytime",
+    label: "Anytime",
+  };
   const guests =
-    guestOptions.find((item) => item.id === guestsId) ?? guestOptions[0];
+    guestOptions.find((item) => item.id === guestsId) ?? guestOptions[0] ?? {
+      id: "10-20",
+      label: "10-20",
+    };
 
   return (
     <div

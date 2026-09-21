@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useSubmitContact } from "@/hooks/use-submit-contact";
 
 type ContactFormValues = {
   email: string;
@@ -11,6 +12,7 @@ const inputClassName =
   "w-full border border-footer-border bg-footer-input px-4 text-sm text-white outline-none transition-colors placeholder:text-footer-muted focus:border-brand";
 
 export function ContactForm() {
+  const contact = useSubmitContact();
   const {
     register,
     handleSubmit,
@@ -23,9 +25,12 @@ export function ContactForm() {
     },
   });
 
-  const onSubmit = (_data: ContactFormValues) => {
+  const onSubmit = async (data: ContactFormValues) => {
+    await contact.mutateAsync(data);
     reset();
   };
+
+  const pending = isSubmitting || contact.isPending;
 
   return (
     <form
@@ -80,13 +85,17 @@ export function ContactForm() {
         ) : null}
       </div>
 
+      {contact.isError ? (
+        <p className="mt-2 text-xs text-brand">Could not send. Try again.</p>
+      ) : null}
+
       <div className="mt-4 flex justify-end">
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={pending}
           className="h-11 min-w-[96px] cursor-pointer rounded-xl bg-brand px-7 text-sm font-medium text-white transition-colors hover:bg-brand/90 disabled:opacity-70 md:h-12 md:min-w-[180px] md:rounded-2xl md:px-10 lg:min-w-[120px] lg:px-8"
         >
-          Send
+          {pending ? "Sending" : "Send"}
         </button>
       </div>
     </form>

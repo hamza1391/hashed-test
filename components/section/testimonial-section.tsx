@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { useTestimonialData } from "@/lib/data/useTestimonialData";
+import { useHomeContent } from "@/hooks/use-home-content";
 import { useUIStore } from "@/store/ui-store";
 
 function TestimonialCard({
@@ -69,8 +69,10 @@ function getCarouselMetrics(scroller: HTMLDivElement) {
 }
 
 export default function TestimonialSection() {
-  const { testimonialCopy, testimonialStats, testimonials } =
-    useTestimonialData();
+  const home = useHomeContent();
+  const testimonialCopy = home.data?.testimonialCopy;
+  const testimonialStats = home.data?.testimonialStats ?? [];
+  const testimonials = home.data?.testimonials ?? [];
   const scrollerRef = useRef<HTMLDivElement>(null);
   const testimonialCarouselIndex = useUIStore(
     (state) => state.testimonialCarouselIndex
@@ -127,7 +129,7 @@ export default function TestimonialSection() {
           Trusted by Event Creators Who Demand Excellence
         </h2>
         <p className="mx-auto mt-3 max-w-[280px] text-center text-sm leading-relaxed text-[#5F5F5F] md:mt-3 md:max-w-[520px] md:text-[15px] lg:max-w-[720px] lg:text-base">
-          {testimonialCopy.description}
+          {testimonialCopy?.description}
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-3 md:mt-10 md:gap-4 lg:grid-cols-4 lg:gap-5">

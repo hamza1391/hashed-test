@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono , Poppins } from "next/font/google";
 import { ConditionalFooter } from "@/components/layout/conditional-footer";
 import { Header } from "@/components/layout/header";
+import { Providers } from "@/app/providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,9 +48,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <ConditionalFooter />
+        <Providers>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <ConditionalFooter />
+        </Providers>
       </body>
     </html>
   );

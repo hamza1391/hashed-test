@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useVenueData } from "@/lib/data/useVenueData";
+import { useHomeContent } from "@/hooks/use-home-content";
 import { useUIStore } from "@/store/ui-store";
 
 function VenueCard({
@@ -20,7 +20,7 @@ function VenueCard({
   return (
     <article
       data-venue-card
-      className="relative h-[320px] w-[240px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-[#1A1A1A] md:h-[360px] md:w-[270px] lg:h-[400px] lg:w-[301px]"
+      className="relative h-[320px] w-[240px] shrink-0 snap-start overflow-hidden rounded-[20px]  md:h-[360px] md:w-[270px] lg:h-[400px] lg:w-[301px]"
     >
       <Image
         src={image}
@@ -40,7 +40,7 @@ function VenueCard({
       <span className="absolute left-4 top-4 rounded-full bg-[#00000080] px-3 py-1 text-[11px] font-medium text-white md:text-xs">
         {count} Venues
       </span>
-      <h3 className="absolute bottom-5 left-4 right-4 text-[22px] font-semibold leading-[1.15] text-white md:text-[24px] lg:text-[26px]">
+      <h3 className="absolute bottom-5 left-4 right-4 text-[22px] font-semibold leading-[1.15] text-white md:text-[24px] lg:text-[30px]">
         {title}
       </h3>
     </article>
@@ -62,7 +62,7 @@ function getCarouselMetrics(scroller: HTMLDivElement) {
 }
 
 export default function VenueSection() {
-  const { venueCategories } = useVenueData();
+  const venueCategories = useHomeContent().data?.venueCategories ?? [];
   const scrollerRef = useRef<HTMLDivElement>(null);
   const venueCarouselIndex = useUIStore((state) => state.venueCarouselIndex);
   const venueCarouselMaxIndex = useUIStore(
@@ -138,7 +138,7 @@ export default function VenueSection() {
             aria-label="Previous venues"
             disabled={venueCarouselIndex <= 0}
             onClick={() => scrollVenueCarousel("left")}
-            className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#E6E6E6] bg-white text-black shadow-sm transition-opacity hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#E6E6E6]  text-[#000000] bg-[#f4f4f4] shadow-sm transition-opacity hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronLeft className="size-5" />
           </button>
@@ -147,7 +147,7 @@ export default function VenueSection() {
             aria-label="Next venues"
             disabled={venueCarouselIndex >= venueCarouselMaxIndex}
             onClick={() => scrollVenueCarousel("right")}
-            className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#E6E6E6] bg-white text-black shadow-sm transition-opacity hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#E6E6E6]  text-[#000000] bg-[#f4f4f4] shadow-sm transition-opacity hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronRight className="size-5" />
           </button>

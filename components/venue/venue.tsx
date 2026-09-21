@@ -9,12 +9,10 @@ import { VenueCategories } from "@/components/venue/components/venue-categories"
 import { VenueEmptyState } from "@/components/venue/components/venue-empty-state";
 import { VenueResultsBar } from "@/components/venue/components/venue-results-bar";
 import { VenueSearchBar } from "@/components/venue/components/venue-search-bar";
-import { parseVenueSearchParams } from "@/lib/venue-search";
+import { useVenueListingsQuery } from "@/hooks/use-venue-listings";
+import { parseVenueSearchParams } from "@/lib/search/venue-params";
 import { useUIStore } from "@/store/ui-store";
-import {
-  useFilteredVenueListings,
-  useVenueListingStore,
-} from "@/store/venue-store";
+import { useVenueListingStore } from "@/store/venue-store";
 
 const VenueMap = dynamic(
   () => import("@/components/venue/components/venue-map"),
@@ -27,12 +25,12 @@ export default function Venue() {
   const setDateId = useUIStore((state) => state.setDateId);
   const setGuestsId = useUIStore((state) => state.setGuestsId);
   const setListingTab = useUIStore((state) => state.setListingTab);
-  const { results } = useFilteredVenueListings();
+  const { results, isPending, isError } = useVenueListingsQuery();
   const selectedVenueId = useVenueListingStore((state) => state.selectedVenueId);
   const setSelectedVenueId = useVenueListingStore(
     (state) => state.setSelectedVenueId
   );
-  const empty = results.length === 0;
+  const empty = !isPending && !isError && results.length === 0;
 
   useEffect(() => {
     const query = parseVenueSearchParams(searchParams);
@@ -49,18 +47,22 @@ export default function Venue() {
   ]);
 
   useEffect(() => {
-    if (empty) return;
+    if (empty || isPending) return;
     if (!results.some((venue) => venue.id === selectedVenueId)) {
       setSelectedVenueId(results[0].id);
     }
-  }, [empty, results, selectedVenueId, setSelectedVenueId]);
+  }, [empty, isPending, results, selectedVenueId, setSelectedVenueId]);
 
   return (
     <div className="flex h-[calc(100svh-132px)] flex-col overflow-hidden bg-white md:h-[calc(100svh-80px)] lg:h-[calc(100svh-84px)]">
       <VenueSearchBar />
       <VenueCategories />
 
-      {empty ? (
+      {isPending ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-[#8A8A8A]">
+          Loading venues…
+        </div>
+      ) : isError || empty ? (
         <VenueEmptyState />
       ) : (
         <div className="flex min-h-0 flex-1">

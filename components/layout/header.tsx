@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, User } from "lucide-react";
 import { CompactSearch } from "@/components/layout/compact-search";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
-import { useHeroData } from "@/lib/data/useherodata";
+import { useCatalog } from "@/hooks/use-catalog";
 import { useUIStore } from "@/store/ui-store";
 
 const TEXT_LOGO = "/images/Venuze-textcolor.svg";
@@ -63,8 +63,14 @@ function BrandMark({ compact }: { compact: boolean }) {
 }
 
 function ListingLanguageProfile({ compact }: { compact: boolean }) {
-  const { listingOptions, languages, profileOptions, currentUser } =
-    useHeroData();
+  const catalog = useCatalog();
+  const listingOptions = catalog.data?.listingOptions ?? [];
+  const languages = catalog.data?.languages ?? [];
+  const profileOptions = catalog.data?.profileOptions ?? [];
+  const currentUser = catalog.data?.currentUser ?? {
+    name: "",
+    avatar: "/images/avatar.svg",
+  };
   const languageId = useUIStore((state) => state.languageId);
   const setLanguageId = useUIStore((state) => state.setLanguageId);
   const closeDropdowns = useUIStore((state) => state.closeDropdowns);

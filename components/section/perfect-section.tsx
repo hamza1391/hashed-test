@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import { usePerfectData } from "@/lib/data/usePerfectData";
+import { useHomeContent } from "@/hooks/use-home-content";
 
 function PerfectPhoto({
   src,
@@ -40,9 +42,12 @@ function StepNumber({ value }: { value: number }) {
 }
 
 export default function PerfectSection() {
-  const { perfectImages, perfectSteps, perfectCopy } = usePerfectData();
-  const leftImages = [perfectImages[0], perfectImages[2]];
-  const rightImages = [perfectImages[1], perfectImages[3]];
+  const home = useHomeContent();
+  const perfectImages = home.data?.perfectImages ?? [];
+  const perfectSteps = home.data?.perfectSteps ?? [];
+  const perfectCopy = home.data?.perfectCopy;
+  const leftImages = perfectImages.filter((_, index) => index === 0 || index === 2);
+  const rightImages = perfectImages.filter((_, index) => index === 1 || index === 3);
 
   return (
     <section className="bg-white py-12 md:py-16 lg:py-20">
@@ -52,7 +57,7 @@ export default function PerfectSection() {
           <br className="md:hidden" /> Venue
         </h2>
         <p className="mx-auto mt-3 max-w-[320px] text-center text-sm leading-relaxed text-[#5F5F5F] md:mt-4 md:max-w-[640px] md:text-[15px] lg:max-w-7xl lg:text-xl px-12">
-          {perfectCopy.description}
+          {perfectCopy?.description}
         </p>
 
         <div className="mx-auto mt-10 flex max-w-6xl flex-col items-center gap-10 md:mt-12 lg:mt-14 lg:flex-row lg:items-center lg:justify-center lg:gap-[60px]">

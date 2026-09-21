@@ -42,6 +42,3 @@ export const destinations = [
   },
 ] as const;
 
-export function useDestinationData() {
-  return { destinationCopy, destinationCta, destinations };
-}

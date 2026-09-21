@@ -1,10 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useGrowData } from "@/lib/data/useGrowData";
+import { useHomeContent } from "@/hooks/use-home-content";
 
 export default function GrowSection() {
-  const { cta, ctaHref } = useGrowData();
+  const { cta, ctaHref } = useHomeContent().data?.growCopy ?? {
+    cta: "",
+    ctaHref: "#",
+  };
 
   return (
     <section className="relative z-20 bg-white">

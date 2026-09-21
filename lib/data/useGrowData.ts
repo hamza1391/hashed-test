@@ -6,6 +6,3 @@ export const growCopy = {
   ctaHref: "#",
 } as const;
 
-export function useGrowData() {
-  return growCopy;
-}

@@ -50,10 +50,3 @@ export const socialLinks = [
   { id: "instagram", label: "Instagram", href: "https://instagram.com" },
 ] as const;
 
-export function useFooterData() {
-  return {
-    footerHeadline,
-    footerColumns,
-    socialLinks,
-  };
-}

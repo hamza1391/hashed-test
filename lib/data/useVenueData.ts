@@ -49,6 +49,3 @@ export const venueCategories = [
   },
 ] as const;
 
-export function useVenueData() {
-  return { venueCategories };
-}

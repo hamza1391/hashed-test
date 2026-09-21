@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useTrustedData } from "@/lib/data/useTrustedData";
+import { useHomeContent } from "@/hooks/use-home-content";
 import { useUIStore } from "@/store/ui-store";
 
 function TrustedCard({
@@ -57,7 +57,7 @@ function getCarouselMetrics(scroller: HTMLDivElement) {
 }
 
 export default function TrustedSection() {
-  const { trustedVendors } = useTrustedData();
+  const trustedVendors = useHomeContent().data?.trustedVendors ?? [];
   const scrollerRef = useRef<HTMLDivElement>(null);
   const trustedCarouselIndex = useUIStore((state) => state.trustedCarouselIndex);
   const trustedCarouselMaxIndex = useUIStore(

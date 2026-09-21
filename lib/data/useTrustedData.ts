@@ -41,6 +41,3 @@ export const trustedVendors = [
   },
 ] as const;
 
-export function useTrustedData() {
-  return { trustedVendors };
-}

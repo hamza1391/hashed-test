@@ -1,17 +1,10 @@
-export type VenueListingCategoryId =
-  | "all"
-  | "photo-studio"
-  | "film-studio"
-  | "warehouse"
-  | "gallery"
-  | "restaurant"
-  | "apartment"
-  | "office-space"
-  | "venue"
-  | "private-party"
-  | "meeting";
+import type {
+  VenueListing,
+  VenueListingCategoryId,
+  VenueSortId,
+} from "@/lib/venues/types";
 
-export type VenueSortId = "recommended" | "price-asc" | "price-desc";
+export type { VenueListing, VenueListingCategoryId, VenueSortId };
 
 export const venueListingCategories: {
   id: VenueListingCategoryId;
@@ -95,29 +88,6 @@ export const sortOptions: { id: VenueSortId; label: string }[] = [
   { id: "price-asc", label: "Price: Low to High" },
   { id: "price-desc", label: "Price: High to Low" },
 ];
-
-export type VenueListing = {
-  id: string;
-  title: string;
-  location: string;
-  city: string;
-  locationId: string;
-  guests: string;
-  size: string;
-  parking: string;
-  extraAmenities: number;
-  price: number;
-  images: string[];
-  verified: boolean;
-  categoryId: VenueListingCategoryId;
-  venueTypes: string[];
-  occasions: string[];
-  amenities: string[];
-  capacity: number;
-  sizeValue: number;
-  lat: number;
-  lng: number;
-};
 
 const cardImages = [
   "/images/card/card-1.svg",
@@ -408,13 +378,3 @@ export const venueListings: VenueListing[] = [
   ...regionalListings,
 ];
 
-export function useVenueListingData() {
-  return {
-    venueListingCategories,
-    venueTypes,
-    occasionOptions,
-    amenityOptions,
-    sortOptions,
-    venueListings,
-  };
-}

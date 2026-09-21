@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { occasionOptions, venueTypes } from "@/lib/data/useVenueListingData";
+import { useCatalog } from "@/hooks/use-catalog";
 import { useVenueListingStore } from "@/store/venue-store";
 
 function DualRange({
@@ -84,6 +84,9 @@ function Pill({
 }
 
 export function FilterDialog() {
+  const catalog = useCatalog();
+  const venueTypes = catalog.data?.venueTypes ?? [];
+  const occasionOptions = catalog.data?.occasionOptions ?? [];
   const filterOpen = useVenueListingStore((state) => state.filterOpen);
   const closeFilters = useVenueListingStore((state) => state.closeFilters);
   const draftFilters = useVenueListingStore((state) => state.draftFilters);

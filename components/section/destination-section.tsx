@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useDestinationData } from "@/lib/data/useDestinationData";
+import { useHomeContent } from "@/hooks/use-home-content";
 
 function DestinationCard({
   title,
@@ -60,7 +60,7 @@ function DestinationCard({
 }
 
 function DestinationCta() {
-  const { destinationCta } = useDestinationData();
+  const destinationCta = useHomeContent().data?.destinationCta;
   const router = useRouter();
 
   return (
@@ -104,10 +104,12 @@ function DestinationCta() {
             </p>
             <button
               type="button"
-              onClick={() => router.push(destinationCta.ctaHref)}
+              onClick={() => {
+                if (destinationCta) router.push(destinationCta.ctaHref);
+              }}
               className="mt-5 inline-flex w-full cursor-pointer items-center justify-center rounded-[16px] bg-black px-6 py-3.5 text-base font-medium text-white md:mt-5 md:w-auto md:rounded-full md:px-5 md:py-2.5 md:text-sm lg:px-6 lg:py-2.5"
             >
-              {destinationCta.cta}
+              {destinationCta?.cta}
             </button>
           </div>
 
@@ -127,7 +129,9 @@ function DestinationCta() {
 }
 
 export default function DestinationSection() {
-  const { destinationCopy, destinations } = useDestinationData();
+  const home = useHomeContent();
+  const destinationCopy = home.data?.destinationCopy;
+  const destinations = home.data?.destinations ?? [];
 
   return (
     <>
@@ -137,7 +141,7 @@ export default function DestinationSection() {
             Discover Exceptional Destinations Across the Region
           </h2>
           <p className="mx-auto mt-3 max-w-[300px] text-center text-sm leading-relaxed text-[#5F5F5F] md:mt-4 md:max-w-[520px] md:text-[15px] lg:max-w-[720px] lg:text-base">
-            {destinationCopy.description}
+            {destinationCopy?.description}
           </p>
         </div>
 

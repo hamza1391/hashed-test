@@ -5,7 +5,7 @@ import L from "leaflet";
 import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import { Maximize2, MapPin } from "lucide-react";
 import Image from "next/image";
-import type { VenueListing } from "@/lib/data/useVenueListingData";
+import type { VenueListing } from "@/lib/venues/types";
 import { useVenueListingStore } from "@/store/venue-store";
 import "leaflet/dist/leaflet.css";
 

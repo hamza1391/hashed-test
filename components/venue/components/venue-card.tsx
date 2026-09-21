@@ -13,7 +13,7 @@ import {
   Share2,
   Users,
 } from "lucide-react";
-import type { VenueListing } from "@/lib/data/useVenueListingData";
+import type { VenueListing } from "@/lib/venues/types";
 import { useUIStore } from "@/store/ui-store";
 import { useVenueListingStore } from "@/store/venue-store";
 

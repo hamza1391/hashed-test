@@ -69,6 +69,3 @@ export const testimonials = [
   },
 ] as const;
 
-export function useTestimonialData() {
-  return { testimonialCopy, testimonialStats, testimonials };
-}
