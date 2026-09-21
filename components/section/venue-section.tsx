@@ -103,13 +103,13 @@ export default function VenueSection() {
 
   return (
     <section className="overflow-x-hidden bg-white py-12 md:py-16 lg:py-20">
-      <div className="mx-auto max-w-[1320px] px-5 md:px-8 lg:px-10">
-        <h2 className="text-center text-[28px] font-bold leading-[1.2] text-black md:text-[32px] lg:text-[40px]">
+      <div className="mx-auto max-w-7xl px-5 md:px-8 lg:px-0">
+        <h2 className="text-center text-[28px] font-semibold leading-[1.2] text-[#000000] md:text-[32px] lg:text-[44px]">
           Find The Best Venue For{" "}
           <br className="md:hidden" />
           Any Occasion
         </h2>
-        <p className="mx-auto mt-3 max-w-[320px] text-center text-sm leading-relaxed text-[#5F5F5F] md:mt-4 md:max-w-[620px] md:text-[15px] lg:max-w-[820px] lg:text-base">
+        <p className="mx-auto mt-3 max-w-[320px] text-center text-sm leading-relaxed text-[#000000] md:mt-4 md:max-w-[620px] md:text-[15px] lg:max-w-7xl lg:text-lg">
           Explore venues by category, from timeless ballrooms and rooftops with a
           view to modern studios and outdoor gardens, discover spaces designed to
           inspire unforgettable experiences.

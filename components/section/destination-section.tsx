@@ -64,7 +64,7 @@ function DestinationCta() {
   const router = useRouter();
 
   return (
-    <div className="relative z-30 mx-auto mt-10 -mb-[110px] max-w-7xl px-5 md:mt-12 md:-mb-[120px] md:px-8 lg:mt-14 lg:-mb-[130px] lg:px-0">
+    <div className="relative z-30 mx-auto -mb-[120px] max-w-7xl px-5 md:-mb-[140px] md:px-8 lg:-mb-[160px] lg:px-0">
       <article
         className="relative overflow-hidden rounded-[32px] md:rounded-[28px] lg:rounded-[24px]"
         style={{
@@ -130,34 +130,37 @@ export default function DestinationSection() {
   const { destinationCopy, destinations } = useDestinationData();
 
   return (
-    <section className="relative z-10 bg-white pt-12 md:pt-16 lg:pt-20">
-      <div className="mx-auto max-w-[1320px] px-5 md:px-8 lg:px-10">
-        <h2 className="mx-auto max-w-[280px] text-center text-[28px] font-bold leading-[1.2] text-black md:max-w-[520px] md:text-[32px] lg:max-w-none lg:text-[40px]">
-          Discover Exceptional Destinations Across the Region
-        </h2>
-        <p className="mx-auto mt-3 max-w-[300px] text-center text-sm leading-relaxed text-[#5F5F5F] md:mt-4 md:max-w-[520px] md:text-[15px] lg:max-w-[720px] lg:text-base">
-          {destinationCopy.description}
-        </p>
-      </div>
-
-      <div className="mx-auto mt-8 max-w-[1320px] overflow-x-hidden md:mt-10 md:overflow-visible">
-        <div className="flex gap-4 overflow-x-auto scroll-smooth px-[calc((100%-min(300px,85vw))/2)] snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:justify-center md:gap-4 md:overflow-visible md:px-8 md:snap-none lg:gap-5 lg:px-10">
-          {destinations.map((destination, index) => (
-            <DestinationCard
-              key={destination.id}
-              title={destination.title}
-              count={destination.count}
-              tagline={destination.tagline}
-              popular={destination.popular}
-              price={destination.price}
-              image={destination.image}
-              eager={index < 3}
-            />
-          ))}
+    <>
+      <section className="relative bg-white pt-12 md:pt-16 lg:pt-20">
+        <div className="mx-auto max-w-[1320px] px-5 md:px-8 lg:px-10">
+          <h2 className="mx-auto max-w-[280px] text-center text-[28px] font-bold leading-[1.2] text-black md:max-w-[520px] md:text-[32px] lg:max-w-none lg:text-[40px]">
+            Discover Exceptional Destinations Across the Region
+          </h2>
+          <p className="mx-auto mt-3 max-w-[300px] text-center text-sm leading-relaxed text-[#5F5F5F] md:mt-4 md:max-w-[520px] md:text-[15px] lg:max-w-[720px] lg:text-base">
+            {destinationCopy.description}
+          </p>
         </div>
-      </div>
+
+        <div className="mx-auto mt-8 max-w-[1320px] overflow-x-hidden md:mt-10 md:overflow-visible">
+          <div className="flex gap-4 overflow-x-auto scroll-smooth px-[calc((100%-min(300px,85vw))/2)] snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:justify-center md:gap-4 md:overflow-visible md:px-8 md:snap-none lg:gap-5 lg:px-10">
+            {destinations.map((destination, index) => (
+              <DestinationCard
+                key={destination.id}
+                title={destination.title}
+                count={destination.count}
+                tagline={destination.tagline}
+                popular={destination.popular}
+                price={destination.price}
+                image={destination.image}
+                eager={index < 3}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="h-10 md:h-12 lg:h-14" />
+      </section>
 
       <DestinationCta />
-    </section>
+    </>
   );
 }

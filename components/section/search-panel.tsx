@@ -1,9 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { Building2, ChevronDown, Search, Sparkles } from "lucide-react";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
 import { useHeroData } from "@/lib/data/useherodata";
+import { buildVenueSearchPath } from "@/lib/venue-search";
 import { useUIStore, type ListingTab } from "@/store/ui-store";
 
 function VenueVendorTabs({
@@ -27,7 +29,7 @@ function VenueVendorTabs({
 
   return (
     <div
-      className={`flex items-center rounded-2xl bg-white ${
+      className={`flex items-center lg:h-[55px] rounded-[10px] bg-white ${
         stacked ? "w-full gap-2 p-0" : "p-1 shadow-md"
       }`}
     >
@@ -46,11 +48,11 @@ function VenueVendorTabs({
               active
                 ? "bg-brand text-white"
                 : stacked
-                  ? "bg-[#EFEFEF] text-black"
-                  : "bg-white text-black"
+                  ? "bg-[#EFEFEF] text-[#000000]"
+                  : "bg-white text-[#000000]"
             }`}
           >
-            <Icon className="size-4" />
+            <Icon className="size-5" />
             {tab.label}
           </button>
         );
@@ -86,10 +88,10 @@ function SearchField({
           className="flex w-full cursor-pointer items-center justify-between py-3 text-left md:px-3 md:py-2 lg:px-5"
         >
           <span className="flex min-w-0 flex-col">
-            <span className="text-[11px] font-medium leading-none text-[#9A9A9A] md:text-xs">
+            <span className="text-[11px] font-medium leading-none text-[#808080] md:text-xs lg:text-sm">
               {label}
             </span>
-            <span className="mt-1.5 truncate text-sm font-semibold text-black md:text-[15px]">
+            <span className="mt-1.5 truncate text-sm font-semibold text-[#000000] md:text-[15px]">
               {value}
             </span>
           </span>
@@ -115,14 +117,28 @@ function SearchField({
 }
 
 export function SearchPanel() {
+  const router = useRouter();
   const { locations, dates, guestOptions } = useHeroData();
   const locationId = useUIStore((state) => state.locationId);
   const dateId = useUIStore((state) => state.dateId);
   const guestsId = useUIStore((state) => state.guestsId);
+  const listingTab = useUIStore((state) => state.listingTab);
   const setLocationId = useUIStore((state) => state.setLocationId);
   const setDateId = useUIStore((state) => state.setDateId);
   const setGuestsId = useUIStore((state) => state.setGuestsId);
   const closeDropdowns = useUIStore((state) => state.closeDropdowns);
+
+  function handleSearch() {
+    closeDropdowns();
+    router.push(
+      buildVenueSearchPath({
+        locationId,
+        dateId,
+        guestsId,
+        listingTab,
+      })
+    );
+  }
 
   const location = locations.find((item) => item.id === locationId) ?? locations[0];
   const date = dates.find((item) => item.id === dateId) ?? dates[0];
@@ -134,7 +150,7 @@ export function SearchPanel() {
         <VenueVendorTabs variant="overlap" />
       </div>
 
-      <div className="relative z-10 rounded-3xl bg-white p-4 shadow-[0_16px_50px_rgba(0,0,0,0.18)] md:flex md:items-center md:gap-1 md:p-2.5 md:pl-2 md:pt-4 lg:p-3 lg:pl-2 lg:pt-5">
+      <div className="relative z-10 rounded-3xl bg-white p-4 shadow-[0_16px_50px_rgba(0,0,0,0.18)] md:flex md:items-center md:gap-1 md:p-2.5 md:pl-2 md:pt-4 lg:p-3 lg:pl-2 lg:pt-8">
         <div className="md:hidden">
           <VenueVendorTabs variant="stacked" />
         </div>
@@ -179,8 +195,8 @@ export function SearchPanel() {
 
         <button
           type="button"
-          onClick={closeDropdowns}
-          className="mt-3 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-brand text-base font-medium text-white transition-colors hover:bg-brand/90 md:mt-0 md:h-12 md:w-auto md:shrink-0 md:px-7 lg:h-[52px] lg:px-8"
+          onClick={handleSearch}
+          className="mt-3 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-brand text-base lg:text-2xl font-medium text-white transition-colors hover:bg-brand/90 md:mt-0 md:h-12 md:w-auto md:shrink-0 md:px-7 lg:h-[52px] lg:px-8"
         >
           <Search className="size-5" />
           Search

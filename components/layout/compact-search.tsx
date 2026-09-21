@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
 import { useHeroData } from "@/lib/data/useherodata";
+import { buildVenueSearchPath } from "@/lib/venue-search";
 import { useUIStore, type DropdownId } from "@/store/ui-store";
 
 function CompactField({
@@ -30,7 +32,7 @@ function CompactField({
           onClick={toggle}
           aria-expanded={open}
           aria-label={label}
-          className="flex min-w-0 cursor-pointer items-center justify-center px-2.5 py-2 text-[13px] font-medium leading-none text-[#3A3A3A] md:px-3.5 md:text-sm lg:px-3.5 lg:text-[13px] lg:font-normal lg:text-[#5C5C5C]"
+          className="flex min-w-0 cursor-pointer items-center justify-center px-2.5 py-2 text-[13px] font-medium leading-none md:px-3.5 md:text-sm lg:px-6 lg:text-[13px] lg:font-normal text-[#000000]"
         >
           <span className="truncate lg:hidden">{label}</span>
           <span className="hidden truncate lg:inline">{value}</span>
@@ -51,14 +53,28 @@ function CompactField({
 }
 
 export function CompactSearch({ className = "" }: { className?: string }) {
+  const router = useRouter();
   const { locations, dates, guestOptions } = useHeroData();
   const locationId = useUIStore((state) => state.locationId);
   const dateId = useUIStore((state) => state.dateId);
   const guestsId = useUIStore((state) => state.guestsId);
+  const listingTab = useUIStore((state) => state.listingTab);
   const setLocationId = useUIStore((state) => state.setLocationId);
   const setDateId = useUIStore((state) => state.setDateId);
   const setGuestsId = useUIStore((state) => state.setGuestsId);
   const closeDropdowns = useUIStore((state) => state.closeDropdowns);
+
+  function handleSearch() {
+    closeDropdowns();
+    router.push(
+      buildVenueSearchPath({
+        locationId,
+        dateId,
+        guestsId,
+        listingTab,
+      })
+    );
+  }
 
   const location =
     locations.find((item) => item.id === locationId) ?? locations[0];
@@ -101,7 +117,7 @@ export function CompactSearch({ className = "" }: { className?: string }) {
 
       <button
         type="button"
-        onClick={closeDropdowns}
+        onClick={handleSearch}
         aria-label="Search"
         className="mr-1.5 flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-[10px] bg-brand text-white transition-colors hover:bg-brand/90 md:mr-0 md:size-11 md:rounded-[12px] lg:size-9 lg:rounded-[10px]"
       >

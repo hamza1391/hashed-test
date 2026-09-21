@@ -10,7 +10,7 @@ import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
 import { useHeroData } from "@/lib/data/useherodata";
 import { useUIStore } from "@/store/ui-store";
 
-const TEXT_LOGO = "/images/Venuze-Textcolor-Logo 2.svg";
+const TEXT_LOGO = "/images/Venuze-textcolor.svg";
 
 function BrandMark({ compact }: { compact: boolean }) {
   return (
@@ -24,7 +24,7 @@ function BrandMark({ compact }: { compact: boolean }) {
             height={33}
             preload
             decoding="sync"
-            className="h-[22px] w-auto md:h-[33px]"
+            className="h-[22px] w-auto md:h-[33px] md:hidden"
           />
           <Image
             src={TEXT_LOGO}
@@ -33,7 +33,7 @@ function BrandMark({ compact }: { compact: boolean }) {
             height={20}
             preload
             decoding="sync"
-            className="hidden h-[16px] w-auto md:block lg:h-[20px]"
+            className="hidden h-[20px] w-auto md:block lg:h-[30px]"
           />
         </>
       ) : (
@@ -73,7 +73,7 @@ function ListingLanguageProfile({ compact }: { compact: boolean }) {
 
   const pill = compact
     ? "rounded-full border border-[#E8E8E8] bg-white text-brand"
-    : "rounded-2xl bg-white text-brand shadow-sm";
+    : "rounded-[10px] bg-white  text-brand shadow-sm";
 
   return (
     <div className="flex items-center gap-2 md:gap-2.5">
@@ -91,7 +91,7 @@ function ListingLanguageProfile({ compact }: { compact: boolean }) {
           >
             Add your listing
             <ChevronDown
-              className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+              className={`size-4 transition-transform text-[#6b7280] ${open ? "rotate-180" : ""}`}
             />
           </button>
         )}
@@ -119,7 +119,7 @@ function ListingLanguageProfile({ compact }: { compact: boolean }) {
           >
             {activeLanguage}
             <ChevronDown
-              className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+              className={`size-4 transition-transform text-[#6b7280] ${open ? "rotate-180" : ""}`}
             />
           </button>
         )}
@@ -239,7 +239,7 @@ function LandingBar() {
 function CompactBar() {
   return (
     <div className="px-3 pt-3 md:relative md:flex md:items-center md:justify-between md:px-6 md:py-3.5 lg:px-10 lg:py-4">
-      <div className="rounded-[20px] bg-white p-3 shadow-[0_10px_30px_rgba(0,0,0,0.12)] md:contents md:rounded-none md:bg-transparent md:p-0 md:shadow-none">
+      <div className="rounded-[20px] bg-white p-3 shadow-[0px_4px_10px_0px_#0000001A] md:contents md:rounded-none md:bg-transparent md:p-0 md:shadow-none">
         <div className="flex items-center justify-between gap-3 md:contents">
           <div className="md:order-1">
             <BrandMark compact />
@@ -299,7 +299,7 @@ export function Header() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors ${
           compact
-            ? "bg-transparent md:bg-white md:shadow-[0_1px_0_rgba(0,0,0,0.06)]"
+            ? "bg-transparent md:bg-white md:shadow-[0px_4px_10px_0px_#0000001A]"
             : "bg-transparent"
         }`}
       >

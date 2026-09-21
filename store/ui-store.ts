@@ -23,7 +23,8 @@ export type DropdownId =
   | "guests"
   | "compactWhere"
   | "compactWhen"
-  | "compactGuests";
+  | "compactGuests"
+  | "venueSort";
 
 type UIState = {
   listingTab: ListingTab;
