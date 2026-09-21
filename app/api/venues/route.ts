@@ -4,6 +4,8 @@ import { defaultVenueFilters, type VenueFilters } from "@/lib/venues/filters";
 import type { VenueListingCategoryId, VenueSortId } from "@/lib/venues/types";
 import type { ListingTab } from "@/store/ui-store";
 
+export const dynamic = "force-dynamic";
+
 function parseFilters(value: string | null): VenueFilters {
   if (!value) return defaultVenueFilters;
   try {

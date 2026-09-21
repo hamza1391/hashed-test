@@ -218,7 +218,7 @@ export default function FeaturedSection() {
                 key={category.id}
                 type="button"
                 onClick={() => setFeaturedCategory(category.id)}
-                className={`shrink-0 snap-center rounded-[10px] px-[30px] py-5 text-base  tracking-wide uppercase transition-colors ${
+                className={`shrink-0 snap-center rounded-[10px] py-3 px-5 md:px-[30px] md:py-5 text-base  tracking-wide uppercase transition-colors ${
                   active
                     ? "bg-brand text-white"
                     : "bg-[#b7b7b7]/50 text-white hover:bg-black/55"

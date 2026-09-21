@@ -1,12 +1,17 @@
 import { api } from "@/lib/api/client";
-import type {
-  VenueListingsQuery,
-  VenueListingsResponse,
+import {
+  searchVenueListings,
+  type VenueListingsQuery,
+  type VenueListingsResponse,
 } from "@/lib/venues/search";
 
 export async function getVenueListings(
   query: VenueListingsQuery
 ): Promise<VenueListingsResponse> {
+  if (typeof window === "undefined") {
+    return searchVenueListings(query);
+  }
+
   const { data } = await api.get<VenueListingsResponse>("/venues", {
     params: {
       where: query.locationId,

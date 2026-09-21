@@ -38,6 +38,10 @@ export function buildCatalog() {
 export type Catalog = ReturnType<typeof buildCatalog>;
 
 export async function getCatalog(): Promise<Catalog> {
+  if (typeof window === "undefined") {
+    return buildCatalog();
+  }
+
   const { data } = await api.get<Catalog>("/catalog");
   return data;
 }

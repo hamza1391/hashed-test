@@ -33,6 +33,10 @@ export function buildHomeContent() {
 export type HomeContent = ReturnType<typeof buildHomeContent>;
 
 export async function getHomeContent(): Promise<HomeContent> {
+  if (typeof window === "undefined") {
+    return buildHomeContent();
+  }
+
   const { data } = await api.get<HomeContent>("/home");
   return data;
 }
